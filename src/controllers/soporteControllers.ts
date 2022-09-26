@@ -26,7 +26,7 @@ class SoporteControllers {
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The soporte no existe",
+        message: "El registro de soporte no existe",
         detail: error.message,
       });
     }
@@ -49,7 +49,7 @@ class SoporteControllers {
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The soporte no existe",
+        message: "El registro de soporte no existe",
         detail: error.message,
       });
     }
@@ -60,11 +60,11 @@ class SoporteControllers {
       await pool.query("INSERT INTO `sabfztdb`.`soporte` set ?", [
         req.body,
       ]);
-      res.json({ id: 1, message: "The soporte fue registrado", detail: "" });
+      res.json({ id: 1, message: "El registro de soporte fue registrado", detail: "" });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The soporte no fue registrado",
+        message: "El registro de soporte no fue registrado",
         detail: error.message,
       });
     }
@@ -77,11 +77,11 @@ class SoporteControllers {
         "UPDATE `sabfztdb`.`soporte` SET ? WHERE idSoporte = ?;",
         [description, idSoporte]
       );
-      res.json({ id: 1, message: "The soporte fue actualizado", detail: "" });
+      res.json({ id: 1, message: "El registro de soporte fue actualizado", detail: "" });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The soporte no fue actualizado",
+        message: "El registro de soporte no fue actualizado",
         detail: error.message,
       });
     }
@@ -93,11 +93,11 @@ class SoporteControllers {
       await pool.query("DELETE FROM `sabfztdb`.`soporte` WHERE idSoporte = ?;", [
         idSoporte,
       ]);
-      res.json({ id: 1, message: "The soporte fue eliminado", detail: "" });
+      res.json({ id: 1, message: "El registro de soporte fue eliminado", detail: "" });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The soporte no fue eliminado",
+        message: "El registro de soporte no fue eliminado",
         detail: error.message,
       });
     }

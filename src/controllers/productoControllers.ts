@@ -35,7 +35,7 @@ class ProductosController {
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The producto wasn't exists",
+        message: "El producto wasn't exists",
         detail: error.message,
       });
     }
@@ -53,11 +53,11 @@ class ProductosController {
       const idProducto = "P" + id_number.toString().padStart(9, "0");
       req.body.idProducto = idProducto;
       await pool.query("INSERT INTO `sabfztdb`.`producto` set ?", [req.body]);
-      res.json({ id: 1, message: "The producto fue registrado", detail: "" });
+      res.json({ id: 1, message: "El producto fue registrado", detail: "" });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The producto no fue registrado",
+        message: "El producto no fue registrado",
         detail: error.message,
       });
     }
@@ -70,11 +70,11 @@ class ProductosController {
         req.body,
         idProducto,
       ]);
-      res.json({ id: 1, message: "The producto fue actualizado", detail: "" });
+      res.json({ id: 1, message: "El producto fue actualizado", detail: "" });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The producto no fue actualizado",
+        message: "El producto no fue actualizado",
         detail: error.message,
       });
     }
@@ -84,11 +84,11 @@ class ProductosController {
     try {
       const { idProducto } = req.params;
       await pool.query("DELETE FROM `sabfztdb`.producto WHERE idProducto = ?;", [idProducto]);
-      res.json({ id: 1, message: "The producto fue eliminado", detail: "" });
+      res.json({ id: 1, message: "El producto fue eliminado", detail: "" });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The producto no fue eliminado",
+        message: "El producto no fue eliminado",
         detail: error.message,
       });
     }

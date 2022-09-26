@@ -26,7 +26,7 @@ class MonedaControllers {
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The moneda wasn't exists",
+        message: "La moneda wasn't exists",
         detail: error.message,
       });
     }
@@ -37,11 +37,11 @@ class MonedaControllers {
       await pool.query("INSERT INTO `sabfztdb`.`moneda` set ?", [
         req.body,
       ]);
-      res.json({ id: 1, message: "The moneda fue registrado", detail: "" });
+      res.json({ id: 1, message: "La moneda fue registrado", detail: "" });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The moneda no fue registrado",
+        message: "La moneda no fue registrado",
         detail: error.message,
       });
     }
@@ -54,11 +54,11 @@ class MonedaControllers {
         req.body,
         idMoneda,
       ]);
-      res.json({ id: 1, message: "The moneda fue actualizado", detail: "" });
+      res.json({ id: 1, message: "La moneda fue actualizado", detail: "" });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The moneda no fue actualizado",
+        message: "La moneda no fue actualizado",
         detail: error.message,
       });
     }
@@ -70,11 +70,11 @@ class MonedaControllers {
       await pool.query("DELETE FROM `sabfztdb`.`moneda` WHERE idMoneda = ?;", [
         idMoneda,
       ]);
-      res.json({ id: 1, message: "The moneda fue eliminado", detail: "" });
+      res.json({ id: 1, message: "La moneda fue eliminado", detail: "" });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The moneda no fue eliminado",
+        message: "La moneda no fue eliminado",
         detail: error.message,
       });
     }

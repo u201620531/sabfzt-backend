@@ -9,6 +9,7 @@ class ProveedorControllers {
         " TPV.`descripcion` As `desTipoProveedor`," +
         " PV.`idTipoDocumento`," +
         " TDP.`descripcion` As `desTipoDocumento`," +
+        " TDP.`abreviatura` As `abrTipoDocumento`," +
         " PV.`nroDocumento`," +
         " PV.`razonSocial`," +
         " PV.`nombreComercial`," +
@@ -17,6 +18,7 @@ class ProveedorControllers {
         " PV.`email1`," +
         " PV.`email2`," +
         " PV.`estado`," +
+        " CASE WHEN PV.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`,"+
         " PV.`fechaCreacion`," +
         " PV.`usuarioCreacion`" +
         " FROM `sabfztdb`.`proveedor` AS PV" +
@@ -43,7 +45,7 @@ class ProveedorControllers {
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The proveedor no existe",
+        message: "El proveedor no existe",
         detail: error.message,
       });
     }
@@ -54,20 +56,20 @@ class ProveedorControllers {
       let id_number = 1;
       const getMaxId = await pool.query(
         "SELECT COUNT(*) idProveedor FROM `sabfztdb`.`proveedor` WHERE `proveedor`.`idTipoProveedor` = ?;",
-        [req.body.proveedorType]
+        [req.body.idTipoProveedor]
       );
       if (getMaxId.length > 0) {
-        id_number = getMaxId[0].id + 1;
+        id_number = getMaxId[0].idProveedor + 1;
       }
       const idProveedor =
-        req.body.proveedorType + id_number.toString().padStart(9, "0");
+        req.body.idTipoProveedor + id_number.toString().padStart(9, "0");
       req.body.idProveedor = idProveedor;
       await pool.query("INSERT INTO `sabfztdb`.`proveedor` set ?", [req.body]);
-      res.json({ id: 1, message: "The proveedor fue registrado", detail: "" });
+      res.json({ id: 1, message: "El proveedor fue registrado", detail: "" });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The proveedor no fue registrado",
+        message: "El proveedor no fue registrado",
         detail: error.message,
       });
     }
@@ -80,11 +82,11 @@ class ProveedorControllers {
         "UPDATE `sabfztdb`.`proveedor` SET ? WHERE idProveedor = ?;",
         [req.body, idProveedor]
       );
-      res.json({ id: 1, message: "The proveedor fue actualizado", detail: "" });
+      res.json({ id: 1, message: "El proveedor fue actualizado", detail: "" });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The proveedor no fue actualizado",
+        message: "El proveedor no fue actualizado",
         detail: error.message,
       });
     }
@@ -97,11 +99,11 @@ class ProveedorControllers {
         "DELETE FROM `sabfztdb`.`proveedor` WHERE idProveedor = ?;",
         [idProveedor]
       );
-      res.json({ id: 1, message: "The proveedor fue eliminado", detail: "" });
+      res.json({ id: 1, message: "El proveedor fue eliminado", detail: "" });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The proveedor no fue eliminado",
+        message: "El proveedor no fue eliminado",
         detail: error.message,
       });
     }

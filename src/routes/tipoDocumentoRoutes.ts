@@ -11,6 +11,7 @@ class TipoDocumentoRoutes {
   config() {
     this.router.get('/', tipoDocumentoControllers.list);
     this.router.get('/:idTipoDocumento', tipoDocumentoControllers.getOne);
+    this.router.get('/:desTipoDocumento/:estado', tipoDocumentoControllers.getOneByDescripcion);
     this.router.post('/', tipoDocumentoControllers.create);
     this.router.put('/:idTipoDocumento', tipoDocumentoControllers.update);
     this.router.delete('/:idTipoDocumento', tipoDocumentoControllers.delete);

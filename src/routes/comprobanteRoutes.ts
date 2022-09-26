@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import comprobanteControllers from '../controllers/comprobanteControllers';
+import { Router } from "express";
+import comprobanteControllers from "../controllers/comprobanteControllers";
 
 class ComprobanteRoutes {
   router: Router = Router();
@@ -9,11 +9,16 @@ class ComprobanteRoutes {
   }
 
   config() {
-    this.router.get('/', comprobanteControllers.list);
-    this.router.get('/:idComprobante', comprobanteControllers.getOne);
-    this.router.post('/', comprobanteControllers.create);
-    this.router.put('/:idComprobante', comprobanteControllers.update);
-    this.router.delete('/:idComprobante', comprobanteControllers.delete);
+    this.router.get("/", comprobanteControllers.list);
+    this.router.get("/:idComprobante", comprobanteControllers.getOne);
+    this.router.get(
+      "/:nroDocumento/:idTipoDocumento/:idFormaPago/:idMoneda/:fechaEmisionIni/:fechaEmisionFin",
+      comprobanteControllers.report
+    );
+    this.router.post("/", comprobanteControllers.create);
+    this.router.post("/:numComprobantes", comprobanteControllers.createMsivo);
+    this.router.put("/:idComprobante", comprobanteControllers.update);
+    this.router.delete("/:idComprobante", comprobanteControllers.delete);
   }
 }
 
