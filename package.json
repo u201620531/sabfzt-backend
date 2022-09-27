@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf ./build && tsc",
-    "start": "nodemon build/index.js",
-    "dev": "nodemon build/index.js",
-    "postinstall": "npm run tsc"
+    "tsc": "tsc",
+    "build": "tsc -w",
+    "dev": "nodemon build/index.js"
   },
   "keywords": [],
   "author": "",
