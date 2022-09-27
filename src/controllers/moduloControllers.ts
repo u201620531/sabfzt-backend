@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import pool from "../database";
+import keys from "../keys";
 
 class ModuloControllers {
   public async list(req: Request, res: Response) {
-    const modulos = await pool.query("SELECT * FROM `sabfztdb`.`modulo`;");
+    const modulos = await pool.query("SELECT * FROM `" + keys.database.database + "`.`modulo`;");
     res.json(modulos);
   }
 
@@ -11,7 +12,7 @@ class ModuloControllers {
     try {
       const { idModulo } = req.params;
       const modulo = await pool.query(
-        "SELECT * FROM `sabfztdb`.`modulo` WHERE idModulo = ?;",
+        "SELECT * FROM `" + keys.database.database + "`.`modulo` WHERE idModulo = ?;",
         [idModulo]
       );
       if (modulo.length > 0) {
@@ -32,7 +33,7 @@ class ModuloControllers {
     try {
       const { idPerfilUsuario } = req.params;
       const modulos = await pool.query(
-        "SELECT * FROM `sabfztdb`.`modulo` WHERE idPerfilUsuario = ?;",
+        "SELECT * FROM `" + keys.database.database + "`.`modulo` WHERE idPerfilUsuario = ?;",
         [idPerfilUsuario]
       );
       if (modulos.length > 0) {
@@ -57,7 +58,7 @@ class ModuloControllers {
 
   public async create(req: Request, res: Response): Promise<void> {
     try {
-      await pool.query("INSERT INTO `sabfztdb`.`modulo` set ?", [req.body]);
+      await pool.query("INSERT INTO `" + keys.database.database + "`.`modulo` set ?", [req.body]);
       res.json({ id: 1, message: "El modulo fue registrado", detail: "" });
     } catch (error: any) {
       res.status(404).json({
@@ -71,7 +72,7 @@ class ModuloControllers {
   public async update(req: Request, res: Response): Promise<void> {
     try {
       const { idModulo, description } = req.body;
-      await pool.query("UPDATE `sabfztdb`.`modulo` SET ? WHERE idModulo = ?;", [
+      await pool.query("UPDATE `" + keys.database.database + "`.`modulo` SET ? WHERE idModulo = ?;", [
         description,
         idModulo,
       ]);
@@ -88,7 +89,7 @@ class ModuloControllers {
   public async delete(req: Request, res: Response): Promise<void> {
     try {
       const { idModulo } = req.params;
-      await pool.query("DELETE FROM `sabfztdb`.`modulo` WHERE idModulo = ?;", [
+      await pool.query("DELETE FROM `" + keys.database.database + "`.`modulo` WHERE idModulo = ?;", [
         idModulo,
       ]);
       res.json({ id: 1, message: "El modulo fue eliminado", detail: "" });

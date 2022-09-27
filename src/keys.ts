@@ -1,9 +1,9 @@
 export default{
     database:{
-        host: 'localhost',
-        user: 'root',
-        password: 'Yasuan100707',
+        host: 'sabzft-pruebas.mysql.database.azure.com', //'localhost',
+        user: 'admin_sabzft@sabzft-pruebas',//root',
+        password: 'UPCprueba@2022',//'Yasuan100707',
         port: 3306,
-        database: 'sabfztdb'        
+        database: 'sabzft-pruebas'         
     }
 }

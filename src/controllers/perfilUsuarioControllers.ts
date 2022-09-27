@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import pool from "../database";
+import keys from "../keys";
 
 class PerfilUsuarioControllers {
   public async list(req: Request, res: Response) {
     const perfiles = await pool.query(
-      "SELECT * FROM `sabfztdb`.`perfil-usuario`;"
+      "SELECT * FROM `" + keys.database.database + "`.`perfil-usuario`;"
     );
     res.json(perfiles);
   }
@@ -13,7 +14,7 @@ class PerfilUsuarioControllers {
     try {
       const { idPerfilUsuario } = req.params;
       const perfilUsuario = await pool.query(
-        "SELECT * FROM `sabfztdb`.`perfil-usuario` WHERE idPerfilUsuario = ?;",
+        "SELECT * FROM `" + keys.database.database + "`.`perfil-usuario` WHERE idPerfilUsuario = ?;",
         [idPerfilUsuario]
       );
       if (perfilUsuario.length > 0) {
@@ -34,7 +35,7 @@ class PerfilUsuarioControllers {
 
   public async create(req: Request, res: Response): Promise<void> {
     try {
-      await pool.query("INSERT INTO `sabfztdb`.`perfil-usuario` set ?", [
+      await pool.query("INSERT INTO `" + keys.database.database + "`.`perfil-usuario` set ?", [
         req.body,
       ]);
       res.json({
@@ -55,7 +56,7 @@ class PerfilUsuarioControllers {
     try {
       const { idPerfilUsuario } = req.body;
       await pool.query(
-        "UPDATE `sabfztdb`.`perfil-usuario` SET ? WHERE idPerfilUsuario = ?;",
+        "UPDATE `" + keys.database.database + "`.`perfil-usuario` SET ? WHERE idPerfilUsuario = ?;",
         [idPerfilUsuario]
       );
       res.json({
@@ -76,7 +77,7 @@ class PerfilUsuarioControllers {
     try {
       const { idPerfilUsuario } = req.params;
       await pool.query(
-        "DELETE FROM `sabfztdb`.`perfil-usuario` WHERE idPerfilUsuario = ?;",
+        "DELETE FROM `" + keys.database.database + "`.`perfil-usuario` WHERE idPerfilUsuario = ?;",
         [idPerfilUsuario]
       );
       res.json({

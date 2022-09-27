@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import pool from "../database";
+import keys from './../keys';
 
 class TipoDocumentoControllers {
   public async list(req: Request, res: Response) {
@@ -12,7 +13,7 @@ class TipoDocumentoControllers {
           " CASE WHEN `estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
           " `tipo-documento`.`fechaCreacion`," +
           " `tipo-documento`.`usuarioCreacion`" +
-          " FROM `sabfztdb`.`tipo-documento`;"
+          " FROM `" + keys.database.database + "`.`tipo-documento`;"
       );
       res.json(transactionTypes);
     } catch (error: any) {
@@ -29,7 +30,7 @@ class TipoDocumentoControllers {
     try {
       const { idTipoDocumento } = req.params;
       const tipoDocumento = await pool.query(
-        "SELECT * FROM sabfztdb.`tipo-documento` WHERE idTipoDocumento = ?;",
+        "SELECT * FROM `" + keys.database.database + "`.`tipo-documento` WHERE idTipoDocumento = ?;",
         [idTipoDocumento]
       );
       if (tipoDocumento.length > 0) {
@@ -57,7 +58,7 @@ class TipoDocumentoControllers {
     try {
       const { desTipoDocumento } = req.params;
       const query =
-        "SELECT * FROM sabfztdb.`tipo-documento` WHERE descripcion LIKE ";
+        "SELECT * FROM `" + keys.database.database + "`.`tipo-documento` WHERE descripcion LIKE ";
       const tipoDocumento = await pool.query(
         `${query} '%${desTipoDocumento}%'`
       );
@@ -83,7 +84,7 @@ class TipoDocumentoControllers {
 
   public async create(req: Request, res: Response): Promise<void> {
     try {
-      await pool.query("INSERT INTO `sabfztdb`.`tipo-documento` set ?", [
+      await pool.query("INSERT INTO `" + keys.database.database + "`.`tipo-documento` set ?", [
         req.body,
       ]);
       res.json({
@@ -104,7 +105,7 @@ class TipoDocumentoControllers {
     try {
       const { idTipoDocumento } = req.params;
       await pool.query(
-        "UPDATE `sabfztdb`.`tipo-documento` SET ? WHERE idTipoDocumento = ?;",
+        "UPDATE `" + keys.database.database + "`.`tipo-documento` SET ? WHERE idTipoDocumento = ?;",
         [req.body, idTipoDocumento]
       );
       res.json({
@@ -125,7 +126,7 @@ class TipoDocumentoControllers {
     try {
       const { idTipoDocumento } = req.params;
       await pool.query(
-        "DELETE FROM `sabfztdb`.`tipo-documento` WHERE idTipoDocumento = ?;",
+        "DELETE FROM `" + keys.database.database + "`.`tipo-documento` WHERE idTipoDocumento = ?;",
         [idTipoDocumento]
       );
       res.json({

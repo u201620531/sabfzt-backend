@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import pool from "../database";
+import keys from "../keys";
 
 class FormaPagoControllers {
   public async list(req: Request, res: Response) {
@@ -11,7 +12,7 @@ class FormaPagoControllers {
         " CASE WHEN `estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
         " `forma-pago`.`fechaCreacion`," +
         " `forma-pago`.`usuarioCreacion`" +
-        " FROM `sabfztdb`.`forma-pago`;"
+        " FROM `" + keys.database.database + "`.`forma-pago`;"
     );
     res.json(formaPagos);
   }
@@ -20,7 +21,7 @@ class FormaPagoControllers {
     try {
       const { idFormaPago } = req.params;
       const formaPago = await pool.query(
-        "SELECT * FROM sabfztdb.`forma-pago` WHERE idFormaPago = ?;",
+        "SELECT * FROM `" + keys.database.database + "`.`forma-pago` WHERE idFormaPago = ?;",
         [idFormaPago]
       );
       if (formaPago.length > 0) {
@@ -41,16 +42,16 @@ class FormaPagoControllers {
 
   public async create(req: Request, res: Response): Promise<void> {
     try {
-      await pool.query("INSERT INTO `sabfztdb`.`forma-pago` set ?", [req.body]);
+      await pool.query("INSERT INTO `" + keys.database.database + "`.`forma-pago` set ?", [req.body]);
       res.json({
         id: 1,
-        message: "La forma de pago fue registrado",
+        message: "La forma de pago fue registrada",
         detail: "",
       });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "La forma de pago no fue registrado",
+        message: "La forma de pago no fue registrada",
         detail: error.message,
       });
     }
@@ -60,18 +61,18 @@ class FormaPagoControllers {
     try {
       const { idFormaPago } = req.params;
       await pool.query(
-        "UPDATE `sabfztdb`.`forma-pago` SET ? WHERE idFormaPago = ?;",
+        "UPDATE `" + keys.database.database + "`.`forma-pago` SET ? WHERE idFormaPago = ?;",
         [req.body, idFormaPago]
       );
       res.json({
         id: 1,
-        message: "La forma de pago fue actualizado",
+        message: "La forma de pago fue actualizada",
         detail: "",
       });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "La forma de pago no fue actualizado",
+        message: "La forma de pago no fue actualizada",
         detail: error.message,
       });
     }
@@ -81,18 +82,18 @@ class FormaPagoControllers {
     try {
       const { idFormaPago } = req.params;
       await pool.query(
-        "DELETE FROM `sabfztdb`.`forma-pago` WHERE idFormaPago = ?;",
+        "DELETE FROM `" + keys.database.database + "`.`forma-pago` WHERE idFormaPago = ?;",
         [idFormaPago]
       );
       res.json({
         id: 1,
-        message: "La forma de pago fue eliminado",
+        message: "La forma de pago fue eliminada",
         detail: "",
       });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "La forma de pago no fue eliminado",
+        message: "La forma de pago no fue eliminada",
         detail: error.message,
       });
     }

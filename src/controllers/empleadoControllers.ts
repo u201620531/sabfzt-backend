@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import pool from "../database";
+import keys from "../keys";
 
 class EmpleadoControllers {
   public async list(req: Request, res: Response) {
@@ -17,8 +18,8 @@ class EmpleadoControllers {
         " EM.`estado`," +
         " EM.`fechaCreacion`," +
         " EM.`usuarioCreacion`" +
-        " FROM `sabfztdb`.`empleado` AS EM" +
-        " INNER JOIN `sabfztdb`.`soporte` AS CEM ON EM.`idCargo` = CEM.valor AND CEM.idSoporte='CEM';"
+        " FROM `" + keys.database.database + "`.`empleado` AS EM" +
+        " INNER JOIN `" + keys.database.database + "`.`soporte` AS CEM ON EM.`idCargo` = CEM.valor AND CEM.idSoporte='CEM';"
     );
     res.json(empleadoes);
   }
@@ -27,13 +28,13 @@ class EmpleadoControllers {
     try {
       const { idEmpleado } = req.params;
       const empleado = await pool.query(
-        "SELECT * FROM sabfztdb.`empleado` WHERE idEmpleado = ?;",
+        "SELECT * FROM `" + keys.database.database + "`.`empleado` WHERE idEmpleado = ?;",
         [idEmpleado]
       );
       if (empleado.length > 0) {
         res.json(empleado[0]);
       } else {
-        res.status(404).json({ id: 1, text: "empleado no existe", detail: "" });
+        res.status(404).json({ id: 1, text: "El empleado no existe", detail: "" });
       }
     } catch (error: any) {
       res.status(404).json({
@@ -48,14 +49,14 @@ class EmpleadoControllers {
     try {
       let id_number = 1;
       const getMaxId = await pool.query(
-        "SELECT COUNT(*) idEmpleado FROM `sabfztdb`.`empleado`;"
+        "SELECT COUNT(*) idEmpleado FROM `" + keys.database.database + "`.`empleado`;"
       );
       if (getMaxId.length > 0) {
         id_number = getMaxId[0].id + 1;
       }
       const idEmpleado = "E" + id_number.toString().padStart(9, "0");
       req.body.idEmpleado = idEmpleado;
-      await pool.query("INSERT INTO `sabfztdb`.`empleado` set ?", [req.body]);
+      await pool.query("INSERT INTO `" + keys.database.database + "`.`empleado` set ?", [req.body]);
       res.json({ id: 1, message: "El empleado fue registrado", detail: "" });
     } catch (error: any) {
       res.status(404).json({
@@ -70,7 +71,7 @@ class EmpleadoControllers {
     try {
       const { idEmpleado } = req.params;
       await pool.query(
-        "UPDATE `sabfztdb`.`empleado` SET ? WHERE idEmpleado = ?;",
+        "UPDATE `" + keys.database.database + "`.`empleado` SET ? WHERE idEmpleado = ?;",
         [req.body, idEmpleado]
       );
       res.json({ id: 1, message: "El empleado fue actualizado", detail: "" });
@@ -87,7 +88,7 @@ class EmpleadoControllers {
     try {
       const { idEmpleado } = req.params;
       await pool.query(
-        "DELETE FROM `sabfztdb`.`empleado` WHERE idEmpleado = ?;",
+        "DELETE FROM `" + keys.database.database + "`.`empleado` WHERE idEmpleado = ?;",
         [idEmpleado]
       );
       res.json({ id: 1, message: "El empleado fue eliminado", detail: "" });

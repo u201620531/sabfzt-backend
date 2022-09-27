@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import pool from "../database";
+import keys from "../keys";
 
 class ProductosController {
   public async list(req: Request, res: Response) {
@@ -12,8 +13,8 @@ class ProductosController {
         " PR.`estado`," +
         " PR.`fechaCreacion`," +
         " PR.`usuarioCreacion`" +
-        " FROM `sabfztdb`.`producto`  AS PR" +
-        " INNER JOIN `sabfztdb`.`soporte` AS CTP ON PR.`idCategoriaProducto` = CTP.valor AND CTP.idSoporte='CTP';"
+        " FROM `" + keys.database.database + "`.`producto`  AS PR" +
+        " INNER JOIN `" + keys.database.database + "`.`soporte` AS CTP ON PR.`idCategoriaProducto` = CTP.valor AND CTP.idSoporte='CTP';"
     );
     res.json(productos);
   }
@@ -22,7 +23,7 @@ class ProductosController {
     try {
       const { idProducto } = req.params;
       const producto = await pool.query(
-        "SELECT * FROM sabfztdb.`producto` WHERE idProducto = ?;",
+        "SELECT * FROM `" + keys.database.database + "`.`producto` WHERE idProducto = ?;",
         [idProducto]
       );
       if (producto.length > 0) {
@@ -45,14 +46,14 @@ class ProductosController {
     try {
       let id_number = 1;
       const getMaxId = await pool.query(
-        "SELECT COUNT(*) idProducto FROM `sabfztdb`.`producto`;"
+        "SELECT COUNT(*) idProducto FROM `" + keys.database.database + "`.`producto`;"
       );
       if (getMaxId.length > 0) {
         id_number = getMaxId[0].idProducto + 1;
       }
       const idProducto = "P" + id_number.toString().padStart(9, "0");
       req.body.idProducto = idProducto;
-      await pool.query("INSERT INTO `sabfztdb`.`producto` set ?", [req.body]);
+      await pool.query("INSERT INTO `" + keys.database.database + "`.`producto` set ?", [req.body]);
       res.json({ id: 1, message: "El producto fue registrado", detail: "" });
     } catch (error: any) {
       res.status(404).json({
@@ -66,7 +67,7 @@ class ProductosController {
   public async update(req: Request, res: Response): Promise<void> {
     try {
       const { idProducto } = req.params;
-      await pool.query("UPDATE `sabfztdb`.`producto` SET ? WHERE idProducto = ?;", [
+      await pool.query("UPDATE `" + keys.database.database + "`.`producto` SET ? WHERE idProducto = ?;", [
         req.body,
         idProducto,
       ]);
@@ -83,7 +84,7 @@ class ProductosController {
   public async delete(req: Request, res: Response): Promise<void> {
     try {
       const { idProducto } = req.params;
-      await pool.query("DELETE FROM `sabfztdb`.producto WHERE idProducto = ?;", [idProducto]);
+      await pool.query("DELETE FROM `" + keys.database.database + "`.producto WHERE idProducto = ?;", [idProducto]);
       res.json({ id: 1, message: "El producto fue eliminado", detail: "" });
     } catch (error: any) {
       res.status(404).json({

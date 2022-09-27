@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import pool from "../database";
+import keys from "../keys";
 
 class ComprobanteControllers {
   public async list(req: Request, res: Response) {
     const comprobantes = await pool.query(
-      "SELECT ROW_NUMBER() OVER(PARTITION BY C.`serie`) as nroItem, C.`idComprobante`," +
+      "SELECT C.`idComprobante`," +
         " CONCAT(C.`serie`, '-', C.`correlativo`) AS `nroDocumento`," +
         " C.`idProveedor`," +
         " P.`nroDocumento` AS `nroDocumentoProveedor`," +
@@ -34,11 +35,21 @@ class ComprobanteControllers {
         " CASE WHEN C.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
         " C.`fechaCreacion`," +
         " C.`usuarioCreacion`" +
-        " FROM `sabfztdb`.`comprobante` AS C" +
-        " INNER JOIN `sabfztdb`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
-        " INNER JOIN `sabfztdb`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
-        " INNER JOIN `sabfztdb`.`tipo-documento` AS TD ON C.`idTipoDocumento` = TD.`idTipoDocumento`" +
-        " INNER JOIN `sabfztdb`.`moneda` AS M ON C.`idMoneda` = M.`idMoneda`;"
+        " FROM `" +
+        keys.database.database +
+        "`.`comprobante` AS C" +
+        " INNER JOIN `" +
+        keys.database.database +
+        "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
+        " INNER JOIN `" +
+        keys.database.database +
+        "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
+        " INNER JOIN `" +
+        keys.database.database +
+        "`.`tipo-documento` AS TD ON C.`idTipoDocumento` = TD.`idTipoDocumento`" +
+        " INNER JOIN `" +
+        keys.database.database +
+        "`.`moneda` AS M ON C.`idMoneda` = M.`idMoneda`;"
     );
     res.json(comprobantes);
   }
@@ -64,11 +75,21 @@ class ComprobanteControllers {
       " C.`importeTotal` AS `Importe Total`," +
       " M.`descripcion` AS `Moneda`," +
       " C.`estado` AS `Estado`" +
-      " FROM `sabfztdb`.`comprobante` AS C" +
-      " INNER JOIN `sabfztdb`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
-      " INNER JOIN `sabfztdb`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
-      " INNER JOIN `sabfztdb`.`tipo-documento` AS TD ON C.`idTipoDocumento` = TD.`idTipoDocumento`" +
-      " INNER JOIN `sabfztdb`.`moneda` AS M ON C.`idMoneda` = M.`idMoneda`" +
+      " FROM `" +
+      keys.database.database +
+      "`.`comprobante` AS C" +
+      " INNER JOIN `" +
+      keys.database.database +
+      "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
+      " INNER JOIN `" +
+      keys.database.database +
+      "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
+      " INNER JOIN `" +
+      keys.database.database +
+      "`.`tipo-documento` AS TD ON C.`idTipoDocumento` = TD.`idTipoDocumento`" +
+      " INNER JOIN `" +
+      keys.database.database +
+      "`.`moneda` AS M ON C.`idMoneda` = M.`idMoneda`" +
       " WHERE C.`estado` <> ''";
 
     nroDocumento !== "X"
@@ -105,7 +126,9 @@ class ComprobanteControllers {
     try {
       const { idComprobante } = req.params;
       const comprobante = await pool.query(
-        "SELECT * FROM sabfztdb.`comprobante` WHERE idComprobante = ?;",
+        "SELECT * FROM `" +
+          keys.database.database +
+          "`.`comprobante` WHERE idComprobante = ?;",
         [idComprobante]
       );
       if (comprobante.length > 0) {
@@ -118,7 +141,7 @@ class ComprobanteControllers {
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The Comprobante no existe",
+        message: "El comprobante no existe",
         detail: error.message,
       });
     }
@@ -128,7 +151,9 @@ class ComprobanteControllers {
     try {
       let id_number = 1;
       const getMaxId = await pool.query(
-        "SELECT COUNT(*) idComprobante FROM `sabfztdb`.`comprobante`;",
+        "SELECT COUNT(*) idComprobante FROM `" +
+          keys.database.database +
+          "`.`comprobante`;",
         [req.body.ComprobanteType]
       );
       if (getMaxId.length > 0) {
@@ -136,12 +161,13 @@ class ComprobanteControllers {
       }
       const idComprobante = id_number.toString().padStart(10, "0");
       req.body.idComprobante = idComprobante;
-      await pool.query("INSERT INTO `sabfztdb`.`comprobante` set ?", [
-        req.body,
-      ]);
+      await pool.query(
+        "INSERT INTO `" + keys.database.database + "`.`comprobante` set ?",
+        [req.body]
+      );
       res.json({
         id: 1,
-        message: "The Comprobante fue registrado",
+        message: "El comprobante fue registrado",
         detail: "",
       });
     } catch (error: any) {
@@ -158,12 +184,13 @@ class ComprobanteControllers {
       const { numComprobantes } = req.params;
       const idComprobante = numComprobantes.toString().padStart(10, "0");
       req.body.idComprobante = idComprobante;
-      await pool.query("INSERT INTO `sabfztdb`.`comprobante` set ?", [
-        req.body,
-      ]);
+      await pool.query(
+        "INSERT INTO `" + keys.database.database + "`.`comprobante` set ?",
+        [req.body]
+      );
       res.json({
         id: 1,
-        message: "The Comprobante fue registrado",
+        message: "El comprobante fue registrado",
         detail: "",
       });
     } catch (error: any) {
@@ -179,18 +206,20 @@ class ComprobanteControllers {
     try {
       const { idComprobante } = req.params;
       await pool.query(
-        "UPDATE `sabfztdb`.`comprobante` SET ? WHERE idComprobante = ?;",
+        "UPDATE `" +
+          keys.database.database +
+          "`.`comprobante` SET ? WHERE idComprobante = ?;",
         [req.body, idComprobante]
       );
       res.json({
         id: 1,
-        message: "The Comprobante fue actualizado",
+        message: "El comprobante fue actualizado",
         detail: "",
       });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The Comprobante no fue actualizado",
+        message: "El comprobante no fue actualizado",
         detail: error.message,
       });
     }
@@ -200,14 +229,16 @@ class ComprobanteControllers {
     try {
       const { idComprobante } = req.params;
       await pool.query(
-        "DELETE FROM `sabfztdb`.`comprobante` WHERE idComprobante = ?;",
+        "DELETE FROM `" +
+          keys.database.database +
+          "`.`comprobante` WHERE idComprobante = ?;",
         [idComprobante]
       );
-      res.json({ id: 1, message: "The Comprobante fue eliminado", detail: "" });
+      res.json({ id: 1, message: "El comprobante fue eliminado", detail: "" });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "The Comprobante no fue eliminado",
+        message: "El comprobante no fue eliminado",
         detail: error.message,
       });
     }

@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import pool from "../database";
+import keys from "../keys";
 
 class SoporteControllers {
   public async list(req: Request, res: Response) {
     const soportes = await pool.query(
-      "SELECT * FROM `sabfztdb`.`soporte`;"
+      "SELECT * FROM `" + keys.database.database + "`.`soporte`;"
     );
     res.json(soportes);
   }
@@ -13,7 +14,7 @@ class SoporteControllers {
     try {
       const { idSoporte } = req.params;
       const soporte = await pool.query(
-        "SELECT * FROM `sabfztdb`.`soporte` WHERE idSoporte = ?;",
+        "SELECT * FROM `" + keys.database.database + "`.`soporte` WHERE idSoporte = ?;",
         [idSoporte]
       );
       if (soporte.length > 0) {
@@ -36,7 +37,7 @@ class SoporteControllers {
     try {
       const { idSoporte, valor } = req.params;
       const soporte = await pool.query(
-        "SELECT * FROM `sabfztdb`.`soporte` WHERE idSoporte = ? AND valor = ?;",
+        "SELECT * FROM `" + keys.database.database + "`.`soporte` WHERE idSoporte = ? AND valor = ?;",
         [idSoporte, valor]
       );
       if (soporte.length > 0) {
@@ -57,7 +58,7 @@ class SoporteControllers {
 
   public async create(req: Request, res: Response): Promise<void> {
     try {
-      await pool.query("INSERT INTO `sabfztdb`.`soporte` set ?", [
+      await pool.query("INSERT INTO `" + keys.database.database + "`.`soporte` set ?", [
         req.body,
       ]);
       res.json({ id: 1, message: "El registro de soporte fue registrado", detail: "" });
@@ -74,7 +75,7 @@ class SoporteControllers {
     try {
       const { idSoporte, description } = req.body;
       await pool.query(
-        "UPDATE `sabfztdb`.`soporte` SET ? WHERE idSoporte = ?;",
+        "UPDATE `" + keys.database.database + "`.`soporte` SET ? WHERE idSoporte = ?;",
         [description, idSoporte]
       );
       res.json({ id: 1, message: "El registro de soporte fue actualizado", detail: "" });
@@ -90,7 +91,7 @@ class SoporteControllers {
   public async delete(req: Request, res: Response): Promise<void> {
     try {
       const { idSoporte } = req.params;
-      await pool.query("DELETE FROM `sabfztdb`.`soporte` WHERE idSoporte = ?;", [
+      await pool.query("DELETE FROM `" + keys.database.database + "`.`soporte` WHERE idSoporte = ?;", [
         idSoporte,
       ]);
       res.json({ id: 1, message: "El registro de soporte fue eliminado", detail: "" });

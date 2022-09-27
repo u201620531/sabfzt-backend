@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import pool from "../database";
+import keys from "../keys";
 
 class UsuarioControllers {
   public async list(req: Request, res: Response) {
-    const usuarios = await pool.query("SELECT * FROM `sabfztdb`.`usuario`;");
+    const usuarios = await pool.query("SELECT * FROM `" + keys.database.database + "`.`usuario`;");
     res.json(usuarios);
   }
 
@@ -14,7 +15,7 @@ class UsuarioControllers {
     try {
       const { codigoUsuario, contrasena } = req.params;
       const usuario = await pool.query(
-        "SELECT * FROM `sabfztdb`.`usuario` WHERE codigoUsuario = ? AND contrasena = ?;",
+        "SELECT * FROM `" + keys.database.database + "`.`usuario` WHERE codigoUsuario = ? AND contrasena = ?;",
         [codigoUsuario, contrasena]
       );
       if (usuario.length > 0) {
@@ -38,7 +39,7 @@ class UsuarioControllers {
     try {
       const { codigoUsuario, valor } = req.params;
       const usuario = await pool.query(
-        "SELECT * FROM `sabfztdb`.`usuario` WHERE codigoUsuario = ? AND valor = ?;",
+        "SELECT * FROM `" + keys.database.database + "`.`usuario` WHERE codigoUsuario = ? AND valor = ?;",
         [codigoUsuario, valor]
       );
       if (usuario.length > 0) {
@@ -59,7 +60,7 @@ class UsuarioControllers {
     try {
       const { codigoUsuario, contrasena } = req.body;
       const usuario = await pool.query(
-        "SELECT * FROM `sabfztdb`.`usuario` WHERE codigoUsuario = ? AND contrasena = ?;",
+        "SELECT * FROM `" + keys.database.database + "`.`usuario` WHERE codigoUsuario = ? AND contrasena = ?;",
         [codigoUsuario, contrasena]
       );
       if (usuario.length > 0) {
@@ -78,7 +79,7 @@ class UsuarioControllers {
 
   public async create(req: Request, res: Response): Promise<void> {
     try {
-      await pool.query("INSERT INTO `sabfztdb`.`usuario` set ?", [req.body]);
+      await pool.query("INSERT INTO `" + keys.database.database + "`.`usuario` set ?", [req.body]);
       res.json({ id: 1, message: "El usuario fue registrado", detail: "" });
     } catch (error: any) {
       res.status(404).json({
@@ -93,7 +94,7 @@ class UsuarioControllers {
     try {
       const { codigoUsuario, description } = req.body;
       await pool.query(
-        "UPDATE `sabfztdb`.`usuario` SET ? WHERE codigoUsuario = ?;",
+        "UPDATE `" + keys.database.database + "`.`usuario` SET ? WHERE codigoUsuario = ?;",
         [description, codigoUsuario]
       );
       res.json({ id: 1, message: "El usuario fue actualizado", detail: "" });
@@ -110,7 +111,7 @@ class UsuarioControllers {
     try {
       const { codigoUsuario } = req.params;
       await pool.query(
-        "DELETE FROM `sabfztdb`.`usuario` WHERE codigoUsuario = ?;",
+        "DELETE FROM `" + keys.database.database + "`.`usuario` WHERE codigoUsuario = ?;",
         [codigoUsuario]
       );
       res.json({ id: 1, message: "El usuario fue eliminado", detail: "" });

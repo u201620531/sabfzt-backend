@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import pool from "../database";
+import keys from "../keys";
 
 class DetallePlantillaComprobanteControllers {
   public async list(req: Request, res: Response) {
@@ -21,9 +22,9 @@ class DetallePlantillaComprobanteControllers {
           " C.`importeTotal`," +
           " '' AS `detalle`," +
           " C.`estado`" +
-          " FROM `sabfztdb`.`comprobante` AS C" +
-          " INNER JOIN `sabfztdb`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
-          " INNER JOIN `sabfztdb`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
+          " FROM `" + keys.database.database + "`.`comprobante` AS C" +
+          " INNER JOIN `" + keys.database.database + "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
+          " INNER JOIN `" + keys.database.database + "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
           " WHERE C.`estado` = 'A';"
         : "SELECT '' AS `select`, DPC.`idPlantillaComprobante`," +
           " DPC.`idComprobante`," +
@@ -40,10 +41,10 @@ class DetallePlantillaComprobanteControllers {
           " DPC.`detalle`," +
           " DPC.`estado`," +
           " CASE WHEN DPC.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`" +
-          " FROM `sabfztdb`.`detalle-plantilla-comprobante` AS DPC" +
-          " INNER JOIN `sabfztdb`.`comprobante` AS C ON DPC.`idComprobante` = C.`idComprobante`" +
-          " INNER JOIN `sabfztdb`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
-          " INNER JOIN `sabfztdb`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
+          " FROM `" + keys.database.database + "`.`detalle-plantilla-comprobante` AS DPC" +
+          " INNER JOIN `" + keys.database.database + "`.`comprobante` AS C ON DPC.`idComprobante` = C.`idComprobante`" +
+          " INNER JOIN `" + keys.database.database + "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
+          " INNER JOIN `" + keys.database.database + "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
           " WHERE DPC.`idPlantillaComprobante` = '" +
           idPlantillaComprobante +
           "';";
@@ -58,7 +59,7 @@ class DetallePlantillaComprobanteControllers {
     try {
       const { idPlantillaComprobante, idComprobante } = req.params;
       const DetallePlantillaComprobante = await pool.query(
-        "SELECT * FROM sabfztdb.`detalle-plantilla-comprobante` WHERE idPlantillaComprobante = ? AND idComprobante = ?;",
+        "SELECT * FROM `" + keys.database.database + "`.`detalle-plantilla-comprobante` WHERE idPlantillaComprobante = ? AND idComprobante = ?;",
         [idPlantillaComprobante, idComprobante]
       );
       if (DetallePlantillaComprobante.length > 0) {
@@ -66,14 +67,14 @@ class DetallePlantillaComprobanteControllers {
       } else {
         res.status(404).json({
           id: 1,
-          text: "El dtalle de la plantilla no existe",
+          text: "El detalle de la plantilla no existe",
           detail: "",
         });
       }
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "El dtalle de la plantilla no existe",
+        message: "El detalle de la plantilla no existe",
         detail: error.message,
       });
     }
@@ -82,18 +83,18 @@ class DetallePlantillaComprobanteControllers {
   public async create(req: Request, res: Response): Promise<void> {
     try {
       await pool.query(
-        "INSERT INTO `sabfztdb`.`detalle-plantilla-comprobante` set ?",
+        "INSERT INTO `" + keys.database.database + "`.`detalle-plantilla-comprobante` set ?",
         [req.body]
       );
       res.json({
         id: 1,
-        message: "El dtalle de la plantilla fue registrada",
+        message: "El detalle de la plantilla fue registrada",
         detail: "",
       });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "El dtalle de la plantilla no fue registrada",
+        message: "El detalle de la plantilla no fue registrada",
         detail: error.message,
       });
     }
@@ -103,18 +104,18 @@ class DetallePlantillaComprobanteControllers {
     try {
       const { idPlantillaComprobante } = req.params;
       await pool.query(
-        "UPDATE `sabfztdb`.`detalle-plantilla-comprobante` SET ? WHERE idPlantillaComprobante = ?;",
+        "UPDATE `" + keys.database.database + "`.`detalle-plantilla-comprobante` SET ? WHERE idPlantillaComprobante = ?;",
         [req.body, idPlantillaComprobante]
       );
       res.json({
         id: 1,
-        message: "El dtalle de la plantilla fue actualizada",
+        message: "El detalle de la plantilla fue actualizada",
         detail: "",
       });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "El dtalle de la plantilla no fue actualizada",
+        message: "El detalle de la plantilla no fue actualizada",
         detail: error.message,
       });
     }
@@ -124,18 +125,18 @@ class DetallePlantillaComprobanteControllers {
     try {
       const { idPlantillaComprobante, idComprobante } = req.params;
       await pool.query(
-        "UPDATE `sabfztdb`.`detalle-plantilla-comprobante` SET ? WHERE idPlantillaComprobante = ? AND idComprobante = ?;",
+        "UPDATE `" + keys.database.database + "`.`detalle-plantilla-comprobante` SET ? WHERE idPlantillaComprobante = ? AND idComprobante = ?;",
         [req.body, idPlantillaComprobante, idComprobante]
       );
       res.json({
         id: 1,
-        message: "El dtalle de la plantilla fue actualizada",
+        message: "El detalle de la plantilla fue actualizada",
         detail: "",
       });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "El dtalle de la plantilla no fue actualizada",
+        message: "El detalle de la plantilla no fue actualizada",
         detail: error.message,
       });
     }
@@ -145,18 +146,18 @@ class DetallePlantillaComprobanteControllers {
     try {
       const { idPlantillaComprobante } = req.params;
       await pool.query(
-        "DELETE FROM `sabfztdb`.`detalle-plantilla-comprobante` WHERE idPlantillaComprobante = ?;",
+        "DELETE FROM `" + keys.database.database + "`.`detalle-plantilla-comprobante` WHERE idPlantillaComprobante = ?;",
         [idPlantillaComprobante]
       );
       res.json({
         id: 1,
-        message: "El dtalle de la plantilla fue eliminada",
+        message: "El detalle de la plantilla fue eliminada",
         detail: "",
       });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "El dtalle de la plantilla no fue eliminada",
+        message: "El detalle de la plantilla no fue eliminada",
         detail: error.message,
       });
     }
@@ -166,18 +167,18 @@ class DetallePlantillaComprobanteControllers {
     try {
       const { idPlantillaComprobante, idComprobante } = req.params;
       await pool.query(
-        "DELETE FROM `sabfztdb`.`detalle-plantilla-comprobante` WHERE idPlantillaComprobante = ? AND idComprobante = ?;",
+        "DELETE FROM `" + keys.database.database + "`.`detalle-plantilla-comprobante` WHERE idPlantillaComprobante = ? AND idComprobante = ?;",
         [idPlantillaComprobante, idComprobante]
       );
       res.json({
         id: 1,
-        message: "El dtalle de la plantilla fue eliminada",
+        message: "El detalle de la plantilla fue eliminada",
         detail: "",
       });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "El dtalle de la plantilla no fue eliminada",
+        message: "El detalle de la plantilla no fue eliminada",
         detail: error.message,
       });
     }

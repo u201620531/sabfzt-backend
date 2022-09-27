@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import pool from "../database";
+import keys from "../keys";
 
 class PlantillaComprobanteControllers {
   public async list(req: Request, res: Response) {
@@ -12,7 +13,7 @@ class PlantillaComprobanteControllers {
         " CASE WHEN PC.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
         " PC.`fechaCreacion`," +
         " PC.`usuarioCreacion`" +
-        " FROM `sabfztdb`.`plantilla-comprobante` AS PC;"
+        " FROM `" + keys.database.database + "`.`plantilla-comprobante` AS PC;"
     );
     res.json(PlantillaComprobantes);
   }
@@ -21,7 +22,7 @@ class PlantillaComprobanteControllers {
     try {
       const { idPlantillaComprobante } = req.params;
       const PlantillaComprobante = await pool.query(
-        "SELECT * FROM sabfztdb.`plantilla-comprobante` WHERE idPlantillaComprobante = ?;",
+        "SELECT * FROM `" + keys.database.database + "`.`plantilla-comprobante` WHERE idPlantillaComprobante = ?;",
         [idPlantillaComprobante]
       );
       if (PlantillaComprobante.length > 0) {
@@ -45,7 +46,7 @@ class PlantillaComprobanteControllers {
     try {
       let id_number = 1;
       const getMaxId = await pool.query(
-        "SELECT COUNT(*) idPlantillaComprobante FROM `sabfztdb`.`plantilla-comprobante`;",
+        "SELECT COUNT(*) idPlantillaComprobante FROM `" + keys.database.database + "`.`plantilla-comprobante`;",
         [req.body.PlantillaComprobanteType]
       );
       if (getMaxId.length > 0) {
@@ -53,7 +54,7 @@ class PlantillaComprobanteControllers {
       }
       idPlantillaComprobante = id_number.toString().padStart(10, "0");
       req.body.idPlantillaComprobante = idPlantillaComprobante;
-      await pool.query("INSERT INTO `sabfztdb`.`plantilla-comprobante` set ?", [
+      await pool.query("INSERT INTO `" + keys.database.database + "`.`plantilla-comprobante` set ?", [
         req.body,
       ]);
       res.json({
@@ -74,7 +75,7 @@ class PlantillaComprobanteControllers {
     try {
       const { idPlantillaComprobante } = req.params;
       await pool.query(
-        "UPDATE `sabfztdb`.`plantilla-comprobante` SET ? WHERE idPlantillaComprobante = ?;",
+        "UPDATE `" + keys.database.database + "`.`plantilla-comprobante` SET ? WHERE idPlantillaComprobante = ?;",
         [req.body, idPlantillaComprobante]
       );
       res.json({ id: 1, message: "La plantilla fue actualizada", detail: "" });
@@ -91,7 +92,7 @@ class PlantillaComprobanteControllers {
     try {
       const { idPlantillaComprobante } = req.params;
       await pool.query(
-        "DELETE FROM `sabfztdb`.`plantilla-comprobante` WHERE idPlantillaComprobante = ?;",
+        "DELETE FROM `" + keys.database.database + "`.`plantilla-comprobante` WHERE idPlantillaComprobante = ?;",
         [idPlantillaComprobante]
       );
       res.json({ id: 1, message: "La plantillafue eliminada", detail: "" });
