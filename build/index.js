@@ -19,6 +19,7 @@ const empleadoRoutes_1 = __importDefault(require("./routes/empleadoRoutes"));
 const perfilUsuarioRoutes_1 = __importDefault(require("./routes/perfilUsuarioRoutes"));
 const plantillaComprobanteRoutes_1 = __importDefault(require("./routes/plantillaComprobanteRoutes"));
 const detallePlantillaComprobanteRoutes_1 = __importDefault(require("./routes/detallePlantillaComprobanteRoutes"));
+const config_1 = require("./config");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -26,7 +27,7 @@ class Server {
         this.routes();
     }
     config() {
-        this.app.set("port", process.env["PORT"] || 3000);
+        this.app.set("port", config_1.PORT);
         this.app.use((0, morgan_1.default)("dev"));
         this.app.use((0, cors_1.default)({
             origin: "*",

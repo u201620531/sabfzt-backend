@@ -15,6 +15,7 @@ import empleadoRoutes from "./routes/empleadoRoutes";
 import perfilUsuarioRoutes from "./routes/perfilUsuarioRoutes";
 import plantillaComprobanteRoutes from "./routes/plantillaComprobanteRoutes";
 import detallePlantillaComprobanteRoutes from "./routes/detallePlantillaComprobanteRoutes";
+import { PORT } from "./config";
 
 class Server {
   public app: Application;
@@ -26,7 +27,7 @@ class Server {
   }
 
   config(): void {
-    this.app.set("PORT", process.env["PORT"] || 3000);
+    this.app.set("port", PORT);
     this.app.use(morgan("dev"));
     this.app.use(
       cors({
