@@ -62,6 +62,7 @@ class ComprobanteControllers {
       idMoneda,
       fechaEmisionIni,
       fechaEmisionFin,
+      estado,
     } = req.params;
 
     let reporteComprobantes =
@@ -104,6 +105,9 @@ class ComprobanteControllers {
       : "";
     idMoneda !== "X"
       ? (reporteComprobantes += " AND C.idMoneda = '" + idMoneda + "'")
+      : "";
+    estado !== "X"
+      ? (reporteComprobantes += " AND C.estado = '" + estado + "'")
       : "";
     fechaEmisionIni !== "X" && fechaEmisionFin === "X"
       ? (reporteComprobantes +=

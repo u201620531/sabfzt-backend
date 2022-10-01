@@ -12,7 +12,7 @@ class ComprobanteRoutes {
     this.router.get("/", comprobanteControllers.list);
     this.router.get("/:idComprobante", comprobanteControllers.getOne);
     this.router.get(
-      "/:nroDocumento/:idTipoDocumento/:idFormaPago/:idMoneda/:fechaEmisionIni/:fechaEmisionFin",
+      "/:nroDocumento/:idTipoDocumento/:idFormaPago/:idMoneda/:fechaEmisionIni/:fechaEmisionFin/:estado",
       comprobanteControllers.report
     );
     this.router.post("/", comprobanteControllers.create);

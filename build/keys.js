@@ -7,6 +7,6 @@ exports.default = {
         user: config_1.DB_USER,
         password: config_1.DB_PASSWORD,
         port: config_1.DB_PORT,
-        database: config_1.DB_NAME, // 'sabzft-pruebas'
+        database: config_1.DB_NAME,
     },
 };

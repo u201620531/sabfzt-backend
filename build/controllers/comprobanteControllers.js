@@ -67,7 +67,7 @@ class ComprobanteControllers {
     }
     report(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { nroDocumento, idTipoDocumento, idFormaPago, idMoneda, fechaEmisionIni, fechaEmisionFin, } = req.params;
+            const { nroDocumento, idTipoDocumento, idFormaPago, idMoneda, fechaEmisionIni, fechaEmisionFin, estado, } = req.params;
             let reporteComprobantes = "SELECT C.`idComprobante` AS `Id Comprobante`," +
                 " C.`serie` + '-' + C.`correlativo` AS `Nro Documento`," +
                 " P.`nroDocumento` AS `RUC/DNI`," +
@@ -106,6 +106,9 @@ class ComprobanteControllers {
                 : "";
             idMoneda !== "X"
                 ? (reporteComprobantes += " AND C.idMoneda = '" + idMoneda + "'")
+                : "";
+            estado !== "X"
+                ? (reporteComprobantes += " AND C.estado = '" + estado + "'")
                 : "";
             fechaEmisionIni !== "X" && fechaEmisionFin === "X"
                 ? (reporteComprobantes +=
