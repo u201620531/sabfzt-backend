@@ -16,6 +16,9 @@ import perfilUsuarioRoutes from "./routes/perfilUsuarioRoutes";
 import plantillaComprobanteRoutes from "./routes/plantillaComprobanteRoutes";
 import detallePlantillaComprobanteRoutes from "./routes/detallePlantillaComprobanteRoutes";
 import { PORT } from "./config";
+import tipoCambioRoutes from "./routes/tipoCambioRoutes";
+import cuentaContableRoutes from "./routes/cuentaContableRoutes";
+import subCuentaContableRoutes from "./routes/subCuentaContableRoutes";
 
 class Server {
   public app: Application;
@@ -52,6 +55,9 @@ class Server {
     this.app.use("/api/usuarios", usuarioRoutes);
     this.app.use("/api/empleados", empleadoRoutes);
     this.app.use("/api/perfilusuarios", perfilUsuarioRoutes);
+    this.app.use("/api/tipocambios", tipoCambioRoutes);
+    this.app.use("/api/cuentacontables", cuentaContableRoutes);
+    this.app.use("/api/subcuentacontables", subCuentaContableRoutes);
   }
 
   start(): void {

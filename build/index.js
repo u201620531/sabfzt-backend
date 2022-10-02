@@ -20,6 +20,9 @@ const perfilUsuarioRoutes_1 = __importDefault(require("./routes/perfilUsuarioRou
 const plantillaComprobanteRoutes_1 = __importDefault(require("./routes/plantillaComprobanteRoutes"));
 const detallePlantillaComprobanteRoutes_1 = __importDefault(require("./routes/detallePlantillaComprobanteRoutes"));
 const config_1 = require("./config");
+const tipoCambioRoutes_1 = __importDefault(require("./routes/tipoCambioRoutes"));
+const cuentaContableRoutes_1 = __importDefault(require("./routes/cuentaContableRoutes"));
+const subCuentaContableRoutes_1 = __importDefault(require("./routes/subCuentaContableRoutes"));
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -49,6 +52,9 @@ class Server {
         this.app.use("/api/usuarios", usuarioRoutes_1.default);
         this.app.use("/api/empleados", empleadoRoutes_1.default);
         this.app.use("/api/perfilusuarios", perfilUsuarioRoutes_1.default);
+        this.app.use("/api/tipocambios", tipoCambioRoutes_1.default);
+        this.app.use("/api/cuentacontables", cuentaContableRoutes_1.default);
+        this.app.use("/api/subcuentacontables", subCuentaContableRoutes_1.default);
     }
     start() {
         this.app.listen(this.app.get("port"), () => {

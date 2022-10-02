@@ -47,7 +47,7 @@ class ProductosController {
             catch (error) {
                 res.status(404).json({
                     id: 0,
-                    message: "El producto wasn't exists",
+                    message: "El producto no existe",
                     detail: error.message,
                 });
             }

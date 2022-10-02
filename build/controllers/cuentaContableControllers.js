@@ -14,31 +14,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../database"));
 const keys_1 = __importDefault(require("../keys"));
-class MonedaControllers {
+class CuentaContableControllers {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const monedas = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`moneda`;");
-            res.json(monedas);
+            const cuentaContables = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`cuenta-contable`;");
+            res.json(cuentaContables);
         });
     }
     getOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { idMoneda } = req.params;
-                const moneda = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`moneda` WHERE idMoneda = ?;", [idMoneda]);
-                if (moneda.length > 0) {
-                    res.json(moneda[0]);
+                const { idCuentaContable } = req.params;
+                const cuentaContable = yield database_1.default.query("SELECT * FROM `" +
+                    keys_1.default.database.database +
+                    "`.`cuenta-contable` WHERE idCuentaContable = ?;", [idCuentaContable]);
+                if (cuentaContable.length > 0) {
+                    res.json(cuentaContable[0]);
                 }
                 else {
                     res
                         .status(404)
-                        .json({ id: 1, text: "moneda no existe", detail: "" });
+                        .json({ id: 1, text: "La cuenta contable no existe", detail: "" });
                 }
             }
             catch (error) {
                 res.status(404).json({
                     id: 0,
-                    message: "La moneda no existe",
+                    message: "La cuenta contable no existe",
                     detail: error.message,
                 });
             }
@@ -47,15 +49,17 @@ class MonedaControllers {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield database_1.default.query("INSERT INTO `" + keys_1.default.database.database + "`.`moneda` set ?", [
-                    req.body,
-                ]);
-                res.json({ id: 1, message: "La moneda fue registrado", detail: "" });
+                yield database_1.default.query("INSERT INTO `" + keys_1.default.database.database + "`.`cuenta-contable` set ?", [req.body]);
+                res.json({
+                    id: 1,
+                    message: "La cuenta contable fue registrada",
+                    detail: "",
+                });
             }
             catch (error) {
                 res.status(404).json({
                     id: 0,
-                    message: "La moneda no fue registrado",
+                    message: "La cuenta contable no fue registrada",
                     detail: error.message,
                 });
             }
@@ -64,17 +68,20 @@ class MonedaControllers {
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { idMoneda } = req.params;
-                yield database_1.default.query("UPDATE `" + keys_1.default.database.database + "`.`moneda` SET ? WHERE idMoneda = ?;", [
-                    req.body,
-                    idMoneda,
-                ]);
-                res.json({ id: 1, message: "La moneda fue actualizado", detail: "" });
+                const { idCuentaContable } = req.params;
+                yield database_1.default.query("UPDATE `" +
+                    keys_1.default.database.database +
+                    "`.`cuenta-contable` SET ? WHERE idCuentaContable = ?;", [req.body, idCuentaContable]);
+                res.json({
+                    id: 1,
+                    message: "La cuenta contable fue actualizada",
+                    detail: "",
+                });
             }
             catch (error) {
                 res.status(404).json({
                     id: 0,
-                    message: "La moneda no fue actualizado",
+                    message: "La cuenta contable no fue actualizada",
                     detail: error.message,
                 });
             }
@@ -83,21 +90,25 @@ class MonedaControllers {
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { idMoneda } = req.params;
-                yield database_1.default.query("DELETE FROM `" + keys_1.default.database.database + "`.`moneda` WHERE idMoneda = ?;", [
-                    idMoneda,
-                ]);
-                res.json({ id: 1, message: "La moneda fue eliminado", detail: "" });
+                const { idCuentaContable } = req.params;
+                yield database_1.default.query("DELETE FROM `" +
+                    keys_1.default.database.database +
+                    "`.`cuenta-contable` WHERE idCuentaContable = ?;", [idCuentaContable]);
+                res.json({
+                    id: 1,
+                    message: "La cuenta contable fue eliminada",
+                    detail: "",
+                });
             }
             catch (error) {
                 res.status(404).json({
                     id: 0,
-                    message: "La moneda no fue eliminado",
+                    message: "La cuenta contable no fue eliminada",
                     detail: error.message,
                 });
             }
         });
     }
 }
-const monedaControllers = new MonedaControllers();
-exports.default = monedaControllers;
+const cuentaContableControllers = new CuentaContableControllers();
+exports.default = cuentaContableControllers;

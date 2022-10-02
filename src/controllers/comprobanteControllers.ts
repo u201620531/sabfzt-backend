@@ -121,7 +121,7 @@ class ComprobanteControllers {
           fechaEmisionFin +
           "'")
       : "";
-
+console.log('reporteComprobantes',reporteComprobantes);
     const DetallePlantillaComprobantes = await pool.query(reporteComprobantes);
     res.json(DetallePlantillaComprobantes);
   }

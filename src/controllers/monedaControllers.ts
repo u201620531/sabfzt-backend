@@ -27,7 +27,7 @@ class MonedaControllers {
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "La moneda wasn't exists",
+        message: "La moneda no existe",
         detail: error.message,
       });
     }

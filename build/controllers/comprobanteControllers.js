@@ -122,6 +122,7 @@ class ComprobanteControllers {
                         fechaEmisionFin +
                         "'")
                 : "";
+            console.log('reporteComprobantes', reporteComprobantes);
             const DetallePlantillaComprobantes = yield database_1.default.query(reporteComprobantes);
             res.json(DetallePlantillaComprobantes);
         });
