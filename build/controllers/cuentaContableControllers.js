@@ -17,7 +17,15 @@ const keys_1 = __importDefault(require("../keys"));
 class CuentaContableControllers {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const cuentaContables = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`cuenta-contable`;");
+            const cuentaContables = yield database_1.default.query("SELECT CC.`idCuentaContable`," +
+                " CC.`nombre`," +
+                " CC.`estado`," +
+                " CASE WHEN CC.`estado`='A' then 'Activo' else 'Inactivo' End AS `desEstado`," +
+                " CC.`fechaCreacion`," +
+                " CC.`usuarioCreacion`" +
+                " FROM `" +
+                keys_1.default.database.database +
+                "`.`cuenta-contable` AS CC;");
             res.json(cuentaContables);
         });
     }

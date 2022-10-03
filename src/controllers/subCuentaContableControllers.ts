@@ -5,7 +5,20 @@ import keys from "../keys";
 class SubCuentaContableControllers {
   public async list(req: Request, res: Response) {
     const SubCuentaContables = await pool.query(
-      "SELECT * FROM `" + keys.database.database + "`.`sub-cuenta-contable`;"
+      "SELECT SCC.`idCuentaContable`," +
+        " CC.`nombre` AS `nomCuentaContable`," +
+        " SCC.`idSubCuentaContable`," +
+        " SCC.`nombre`," +
+        " SCC.`estado`," +
+        " CASE WHEN SCC.`estado`='A' then 'Activo' else 'Inactivo' End AS `desEstado`," +
+        " SCC.`fechaCreacion`," +
+        " SCC.`usuarioCreacion`" +
+        " FROM `" +
+        keys.database.database +
+        "`.`sub-cuenta-contable` AS SCC" +
+        " INNER JOIN `" +
+        keys.database.database +
+        "`.`cuenta-contable` AS CC ON SCC.`idCuentaContable` = CC.`idCuentaContable`;"
     );
     res.json(SubCuentaContables);
   }
@@ -22,13 +35,11 @@ class SubCuentaContableControllers {
       if (SubCuentaContable.length > 0) {
         res.json(SubCuentaContable[0]);
       } else {
-        res
-          .status(404)
-          .json({
-            id: 1,
-            text: "La sub cuenta contable no existe",
-            detail: "",
-          });
+        res.status(404).json({
+          id: 1,
+          text: "La sub cuenta contable no existe",
+          detail: "",
+        });
       }
     } catch (error: any) {
       res.status(404).json({

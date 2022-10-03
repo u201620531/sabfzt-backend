@@ -5,7 +5,15 @@ import keys from "../keys";
 class CuentaContableControllers {
   public async list(req: Request, res: Response) {
     const cuentaContables = await pool.query(
-      "SELECT * FROM `" + keys.database.database + "`.`cuenta-contable`;"
+      "SELECT CC.`idCuentaContable`," +
+        " CC.`nombre`," +
+        " CC.`estado`," +
+        " CASE WHEN CC.`estado`='A' then 'Activo' else 'Inactivo' End AS `desEstado`," +
+        " CC.`fechaCreacion`," +
+        " CC.`usuarioCreacion`" +
+        " FROM `" +
+        keys.database.database +
+        "`.`cuenta-contable` AS CC;"
     );
     res.json(cuentaContables);
   }

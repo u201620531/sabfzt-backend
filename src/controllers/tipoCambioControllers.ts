@@ -5,7 +5,16 @@ import keys from "../keys";
 class TipoCambioControllers {
   public async list(req: Request, res: Response) {
     const tipoCambios = await pool.query(
-      "SELECT * FROM `" + keys.database.database + "`.`tipo-cambio`;"
+      "SELECT TC.`fecha`," +
+        " TC.`compra`," +
+        " TC.`venta`," +
+        " TC.`estado`," +
+        " CASE WHEN TC.`estado`='A' then 'Activo' else 'Inactivo' End AS `desEstado`," +
+        " TC.`fechaCreacion`," +
+        " TC.`usuarioCreacion`" +
+        " FROM `" +
+        keys.database.database +
+        "`.`tipo-cambio` AS TC;"
     );
     res.json(tipoCambios);
   }

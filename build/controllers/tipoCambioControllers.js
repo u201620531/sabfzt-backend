@@ -17,7 +17,16 @@ const keys_1 = __importDefault(require("../keys"));
 class TipoCambioControllers {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const tipoCambios = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`tipo-cambio`;");
+            const tipoCambios = yield database_1.default.query("SELECT TC.`fecha`," +
+                " TC.`compra`," +
+                " TC.`venta`," +
+                " TC.`estado`," +
+                " CASE WHEN TC.`estado`='A' then 'Activo' else 'Inactivo' End AS `desEstado`," +
+                " TC.`fechaCreacion`," +
+                " TC.`usuarioCreacion`" +
+                " FROM `" +
+                keys_1.default.database.database +
+                "`.`tipo-cambio` AS TC;");
             res.json(tipoCambios);
         });
     }
