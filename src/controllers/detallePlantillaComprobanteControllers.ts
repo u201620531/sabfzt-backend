@@ -20,13 +20,23 @@ class DetallePlantillaComprobanteControllers {
           " C.`idFormaPago`," +
           " FP.`descripcion` AS `desFormaPago`," +
           " C.`importeTotal`," +
+          " C.`tipoCambio,`," +
           " '' AS `detalle`," +
           " C.`estado`" +
-          " FROM `" + keys.database.database + "`.`comprobante` AS C" +
-          " INNER JOIN `" + keys.database.database + "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
-          " INNER JOIN `" + keys.database.database + "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
-          " WHERE C.`estado` = 'A';"
-        : "SELECT '' AS `select`, DPC.`idPlantillaComprobante`," +
+          " FROM `" +
+          keys.database.database +
+          "`.`comprobante` AS C" +
+          " INNER JOIN `" +
+          keys.database.database +
+          "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
+          " INNER JOIN `" +
+          keys.database.database +
+          "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
+          " WHERE C.`estado` = 'A'" +
+          " AND C.`idComprobante` NOT IN (SELECT `idComprobante` FROM " +
+          keys.database.database +
+          ".`detalle-plantilla-comprobante`);"
+        : "SELECT '1' AS `select`, DPC.`idPlantillaComprobante`," +
           " DPC.`idComprobante`," +
           " C.`serie`," +
           " C.`correlativo`," +
@@ -38,13 +48,22 @@ class DetallePlantillaComprobanteControllers {
           " C.`idFormaPago`," +
           " FP.`descripcion` AS `desFormaPago`," +
           " C.`importeTotal`," +
+          " C.`tipoCambio`," +
           " DPC.`detalle`," +
           " DPC.`estado`," +
           " CASE WHEN DPC.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`" +
-          " FROM `" + keys.database.database + "`.`detalle-plantilla-comprobante` AS DPC" +
-          " INNER JOIN `" + keys.database.database + "`.`comprobante` AS C ON DPC.`idComprobante` = C.`idComprobante`" +
-          " INNER JOIN `" + keys.database.database + "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
-          " INNER JOIN `" + keys.database.database + "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
+          " FROM `" +
+          keys.database.database +
+          "`.`detalle-plantilla-comprobante` AS DPC" +
+          " INNER JOIN `" +
+          keys.database.database +
+          "`.`comprobante` AS C ON DPC.`idComprobante` = C.`idComprobante`" +
+          " INNER JOIN `" +
+          keys.database.database +
+          "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
+          " INNER JOIN `" +
+          keys.database.database +
+          "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
           " WHERE DPC.`idPlantillaComprobante` = '" +
           idPlantillaComprobante +
           "';";
@@ -59,7 +78,9 @@ class DetallePlantillaComprobanteControllers {
     try {
       const { idPlantillaComprobante, idComprobante } = req.params;
       const DetallePlantillaComprobante = await pool.query(
-        "SELECT * FROM `" + keys.database.database + "`.`detalle-plantilla-comprobante` WHERE idPlantillaComprobante = ? AND idComprobante = ?;",
+        "SELECT * FROM `" +
+          keys.database.database +
+          "`.`detalle-plantilla-comprobante` WHERE idPlantillaComprobante = ? AND idComprobante = ?;",
         [idPlantillaComprobante, idComprobante]
       );
       if (DetallePlantillaComprobante.length > 0) {
@@ -83,7 +104,9 @@ class DetallePlantillaComprobanteControllers {
   public async create(req: Request, res: Response): Promise<void> {
     try {
       await pool.query(
-        "INSERT INTO `" + keys.database.database + "`.`detalle-plantilla-comprobante` set ?",
+        "INSERT INTO `" +
+          keys.database.database +
+          "`.`detalle-plantilla-comprobante` set ?",
         [req.body]
       );
       res.json({
@@ -104,7 +127,9 @@ class DetallePlantillaComprobanteControllers {
     try {
       const { idPlantillaComprobante } = req.params;
       await pool.query(
-        "UPDATE `" + keys.database.database + "`.`detalle-plantilla-comprobante` SET ? WHERE idPlantillaComprobante = ?;",
+        "UPDATE `" +
+          keys.database.database +
+          "`.`detalle-plantilla-comprobante` SET ? WHERE idPlantillaComprobante = ?;",
         [req.body, idPlantillaComprobante]
       );
       res.json({
@@ -125,7 +150,9 @@ class DetallePlantillaComprobanteControllers {
     try {
       const { idPlantillaComprobante, idComprobante } = req.params;
       await pool.query(
-        "UPDATE `" + keys.database.database + "`.`detalle-plantilla-comprobante` SET ? WHERE idPlantillaComprobante = ? AND idComprobante = ?;",
+        "UPDATE `" +
+          keys.database.database +
+          "`.`detalle-plantilla-comprobante` SET ? WHERE idPlantillaComprobante = ? AND idComprobante = ?;",
         [req.body, idPlantillaComprobante, idComprobante]
       );
       res.json({
@@ -146,7 +173,9 @@ class DetallePlantillaComprobanteControllers {
     try {
       const { idPlantillaComprobante } = req.params;
       await pool.query(
-        "DELETE FROM `" + keys.database.database + "`.`detalle-plantilla-comprobante` WHERE idPlantillaComprobante = ?;",
+        "DELETE FROM `" +
+          keys.database.database +
+          "`.`detalle-plantilla-comprobante` WHERE idPlantillaComprobante = ?;",
         [idPlantillaComprobante]
       );
       res.json({
@@ -167,7 +196,9 @@ class DetallePlantillaComprobanteControllers {
     try {
       const { idPlantillaComprobante, idComprobante } = req.params;
       await pool.query(
-        "DELETE FROM `" + keys.database.database + "`.`detalle-plantilla-comprobante` WHERE idPlantillaComprobante = ? AND idComprobante = ?;",
+        "DELETE FROM `" +
+          keys.database.database +
+          "`.`detalle-plantilla-comprobante` WHERE idPlantillaComprobante = ? AND idComprobante = ?;",
         [idPlantillaComprobante, idComprobante]
       );
       res.json({

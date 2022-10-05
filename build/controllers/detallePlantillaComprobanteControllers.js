@@ -33,11 +33,20 @@ class DetallePlantillaComprobanteControllers {
                     " C.`importeTotal`," +
                     " '' AS `detalle`," +
                     " C.`estado`" +
-                    " FROM `" + keys_1.default.database.database + "`.`comprobante` AS C" +
-                    " INNER JOIN `" + keys_1.default.database.database + "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
-                    " INNER JOIN `" + keys_1.default.database.database + "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
-                    " WHERE C.`estado` = 'A';"
-                : "SELECT '' AS `select`, DPC.`idPlantillaComprobante`," +
+                    " FROM `" +
+                    keys_1.default.database.database +
+                    "`.`comprobante` AS C" +
+                    " INNER JOIN `" +
+                    keys_1.default.database.database +
+                    "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
+                    " INNER JOIN `" +
+                    keys_1.default.database.database +
+                    "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
+                    " WHERE C.`estado` = 'A'" +
+                    " AND C.`idComprobante` NOT IN (SELECT `idComprobante` FROM " +
+                    keys_1.default.database.database +
+                    ".`detalle-plantilla-comprobante`);"
+                : "SELECT '1' AS `select`, DPC.`idPlantillaComprobante`," +
                     " DPC.`idComprobante`," +
                     " C.`serie`," +
                     " C.`correlativo`," +
@@ -52,10 +61,18 @@ class DetallePlantillaComprobanteControllers {
                     " DPC.`detalle`," +
                     " DPC.`estado`," +
                     " CASE WHEN DPC.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`" +
-                    " FROM `" + keys_1.default.database.database + "`.`detalle-plantilla-comprobante` AS DPC" +
-                    " INNER JOIN `" + keys_1.default.database.database + "`.`comprobante` AS C ON DPC.`idComprobante` = C.`idComprobante`" +
-                    " INNER JOIN `" + keys_1.default.database.database + "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
-                    " INNER JOIN `" + keys_1.default.database.database + "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
+                    " FROM `" +
+                    keys_1.default.database.database +
+                    "`.`detalle-plantilla-comprobante` AS DPC" +
+                    " INNER JOIN `" +
+                    keys_1.default.database.database +
+                    "`.`comprobante` AS C ON DPC.`idComprobante` = C.`idComprobante`" +
+                    " INNER JOIN `" +
+                    keys_1.default.database.database +
+                    "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
+                    " INNER JOIN `" +
+                    keys_1.default.database.database +
+                    "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
                     " WHERE DPC.`idPlantillaComprobante` = '" +
                     idPlantillaComprobante +
                     "';";
@@ -67,7 +84,9 @@ class DetallePlantillaComprobanteControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idPlantillaComprobante, idComprobante } = req.params;
-                const DetallePlantillaComprobante = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`detalle-plantilla-comprobante` WHERE idPlantillaComprobante = ? AND idComprobante = ?;", [idPlantillaComprobante, idComprobante]);
+                const DetallePlantillaComprobante = yield database_1.default.query("SELECT * FROM `" +
+                    keys_1.default.database.database +
+                    "`.`detalle-plantilla-comprobante` WHERE idPlantillaComprobante = ? AND idComprobante = ?;", [idPlantillaComprobante, idComprobante]);
                 if (DetallePlantillaComprobante.length > 0) {
                     res.json(DetallePlantillaComprobante[0]);
                 }
@@ -91,7 +110,9 @@ class DetallePlantillaComprobanteControllers {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield database_1.default.query("INSERT INTO `" + keys_1.default.database.database + "`.`detalle-plantilla-comprobante` set ?", [req.body]);
+                yield database_1.default.query("INSERT INTO `" +
+                    keys_1.default.database.database +
+                    "`.`detalle-plantilla-comprobante` set ?", [req.body]);
                 res.json({
                     id: 1,
                     message: "El detalle de la plantilla fue registrada",
@@ -111,7 +132,9 @@ class DetallePlantillaComprobanteControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idPlantillaComprobante } = req.params;
-                yield database_1.default.query("UPDATE `" + keys_1.default.database.database + "`.`detalle-plantilla-comprobante` SET ? WHERE idPlantillaComprobante = ?;", [req.body, idPlantillaComprobante]);
+                yield database_1.default.query("UPDATE `" +
+                    keys_1.default.database.database +
+                    "`.`detalle-plantilla-comprobante` SET ? WHERE idPlantillaComprobante = ?;", [req.body, idPlantillaComprobante]);
                 res.json({
                     id: 1,
                     message: "El detalle de la plantilla fue actualizada",
@@ -131,7 +154,9 @@ class DetallePlantillaComprobanteControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idPlantillaComprobante, idComprobante } = req.params;
-                yield database_1.default.query("UPDATE `" + keys_1.default.database.database + "`.`detalle-plantilla-comprobante` SET ? WHERE idPlantillaComprobante = ? AND idComprobante = ?;", [req.body, idPlantillaComprobante, idComprobante]);
+                yield database_1.default.query("UPDATE `" +
+                    keys_1.default.database.database +
+                    "`.`detalle-plantilla-comprobante` SET ? WHERE idPlantillaComprobante = ? AND idComprobante = ?;", [req.body, idPlantillaComprobante, idComprobante]);
                 res.json({
                     id: 1,
                     message: "El detalle de la plantilla fue actualizada",
@@ -151,7 +176,9 @@ class DetallePlantillaComprobanteControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idPlantillaComprobante } = req.params;
-                yield database_1.default.query("DELETE FROM `" + keys_1.default.database.database + "`.`detalle-plantilla-comprobante` WHERE idPlantillaComprobante = ?;", [idPlantillaComprobante]);
+                yield database_1.default.query("DELETE FROM `" +
+                    keys_1.default.database.database +
+                    "`.`detalle-plantilla-comprobante` WHERE idPlantillaComprobante = ?;", [idPlantillaComprobante]);
                 res.json({
                     id: 1,
                     message: "El detalle de la plantilla fue eliminada",
@@ -171,7 +198,9 @@ class DetallePlantillaComprobanteControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idPlantillaComprobante, idComprobante } = req.params;
-                yield database_1.default.query("DELETE FROM `" + keys_1.default.database.database + "`.`detalle-plantilla-comprobante` WHERE idPlantillaComprobante = ? AND idComprobante = ?;", [idPlantillaComprobante, idComprobante]);
+                yield database_1.default.query("DELETE FROM `" +
+                    keys_1.default.database.database +
+                    "`.`detalle-plantilla-comprobante` WHERE idPlantillaComprobante = ? AND idComprobante = ?;", [idPlantillaComprobante, idComprobante]);
                 res.json({
                     id: 1,
                     message: "El detalle de la plantilla fue eliminada",
