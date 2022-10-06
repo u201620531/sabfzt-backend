@@ -31,15 +31,13 @@ class UsuarioControllers {
         if (contrasenaHash) {
           res.json(usuario[0]);
         } else {
-          res
-            .status(404)
-            .json({ id: 1, text: "Contrasena incorrecta", detail: "" });
+          res.json({ id: 1, text: "Contrasena incorrecta", detail: "" });
         }
       } else {
-        res.status(404).json({ id: 1, text: "El usuario no existe", detail: "" });
+        res.json({ id: 1, text: "El usuario no existe", detail: "" });
       }
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El usuario no existe",
         detail: error.message,
