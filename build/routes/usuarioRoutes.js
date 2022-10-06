@@ -14,7 +14,7 @@ class UsuarioRoutes {
         this.router.get('/', usuarioControllers_1.default.list);
         this.router.get('/:codigoUsuario/:contrasena', usuarioControllers_1.default.getBycodigoUsuarioAndContrasena);
         this.router.post('/', usuarioControllers_1.default.create);
-        // this.router.post('/autenticacion/', usuarioControllers.authentication);
+        this.router.put('/', usuarioControllers_1.default.updateAuthentication);
         this.router.put('/:codigoUsuario', usuarioControllers_1.default.update);
         this.router.delete('/:codigoUsuario', usuarioControllers_1.default.delete);
     }

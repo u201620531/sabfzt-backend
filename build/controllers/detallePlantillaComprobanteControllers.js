@@ -31,6 +31,7 @@ class DetallePlantillaComprobanteControllers {
                     " C.`idFormaPago`," +
                     " FP.`descripcion` AS `desFormaPago`," +
                     " C.`importeTotal`," +
+                    " C.`tipoCambio,`," +
                     " '' AS `detalle`," +
                     " C.`estado`" +
                     " FROM `" +
@@ -58,6 +59,7 @@ class DetallePlantillaComprobanteControllers {
                     " C.`idFormaPago`," +
                     " FP.`descripcion` AS `desFormaPago`," +
                     " C.`importeTotal`," +
+                    " C.`tipoCambio`," +
                     " DPC.`detalle`," +
                     " DPC.`estado`," +
                     " CASE WHEN DPC.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`" +
