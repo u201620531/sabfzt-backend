@@ -52,18 +52,18 @@ class UsuarioControllers {
             }
         });
     }
-    getBycodigoUsuarioAndValue(req, res) {
+    getByCodigoUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { codigoUsuario, valor } = req.params;
+                const { codigoUsuario } = req.params;
                 const usuario = yield database_1.default.query("SELECT * FROM `" +
                     keys_1.default.database.database +
-                    "`.`usuario` WHERE codigoUsuario = ? AND valor = ?;", [codigoUsuario, valor]);
+                    "`.`usuario` WHERE codigoUsuario = ?;", [codigoUsuario]);
                 if (usuario.length > 0) {
-                    res.json(usuario);
+                    res.json(usuario[0]);
                 }
                 else {
-                    res.status(404).json({ id: 1, text: "usuario no existe", detail: "" });
+                    res.json({ id: 1, text: "El usuario no existe", detail: "" });
                 }
             }
             catch (error) {

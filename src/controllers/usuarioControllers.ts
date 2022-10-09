@@ -29,6 +29,7 @@ class UsuarioControllers {
           (value: any) => (contrasenaHash = value)
         );
         if (contrasenaHash) {
+
           res.json(usuario[0]);
         } else {
           res.json({ id: 1, text: "Contrasena incorrecta", detail: "" });
@@ -45,22 +46,22 @@ class UsuarioControllers {
     }
   }
 
-  public async getBycodigoUsuarioAndValue(
+  public async getByCodigoUsuario(
     req: Request,
     res: Response
   ): Promise<any> {
     try {
-      const { codigoUsuario, valor } = req.params;
+      const { codigoUsuario } = req.params;
       const usuario = await pool.query(
         "SELECT * FROM `" +
           keys.database.database +
-          "`.`usuario` WHERE codigoUsuario = ? AND valor = ?;",
-        [codigoUsuario, valor]
+          "`.`usuario` WHERE codigoUsuario = ?;",
+        [codigoUsuario]
       );
       if (usuario.length > 0) {
-        res.json(usuario);
+        res.json(usuario[0]);
       } else {
-        res.status(404).json({ id: 1, text: "usuario no existe", detail: "" });
+        res.json({ id: 1, text: "El usuario no existe", detail: "" });
       }
     } catch (error: any) {
       res.status(404).json({
@@ -119,11 +120,11 @@ class UsuarioControllers {
           "`.`usuario` SET `contrasena` = ? WHERE `codigoUsuario` = ?;",
         [contrasena, codigoUsuario]
       );
-      res.json({ id: 1, message: "El usuario fue actualizado", detail: "" });
+      res.json({ id: 1, message: "La contrasena fue actualizada", detail: "" });
     } catch (error: any) {
       res.status(404).json({
         id: 0,
-        message: "El usuario no fue actualizado",
+        message: "La contrasena no fue actualizada",
         detail: error.message,
       });
     }

@@ -10,6 +10,7 @@ class UsuarioRoutes {
 
   config() {
     this.router.get('/', usuarioControllers.list);
+    this.router.get('/:codigoUsuario', usuarioControllers.getByCodigoUsuario);
     this.router.get('/:codigoUsuario/:contrasena', usuarioControllers.getBycodigoUsuarioAndContrasena);
     this.router.post('/', usuarioControllers.create);
     this.router.put('/', usuarioControllers.updateAuthentication);
