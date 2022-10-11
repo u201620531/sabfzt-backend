@@ -116,12 +116,12 @@ class UsuarioControllers {
                 yield database_1.default.query("UPDATE `" +
                     keys_1.default.database.database +
                     "`.`usuario` SET `contrasena` = ? WHERE `codigoUsuario` = ?;", [contrasena, codigoUsuario]);
-                res.json({ id: 1, message: "El usuario fue actualizado", detail: "" });
+                res.json({ id: 1, message: "La contrasena fue actualizada", detail: "" });
             }
             catch (error) {
                 res.status(404).json({
                     id: 0,
-                    message: "El usuario no fue actualizado",
+                    message: "La contrasena no fue actualizada",
                     detail: error.message,
                 });
             }

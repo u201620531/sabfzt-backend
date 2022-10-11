@@ -36,11 +36,9 @@ class TipoDocumentoControllers {
       if (tipoDocumento.length > 0) {
         res.json(tipoDocumento[0]);
       } else {
-        res
-          .status(404)
-          .json({
+        res.json({
             id: 1,
-            message: "El tipo dedocumento no existe",
+            message: "El tipo de documento no existe",
             detail: "",
           });
       }

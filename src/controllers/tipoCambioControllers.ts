@@ -32,8 +32,7 @@ class TipoCambioControllers {
         res.json(tipoCambio[0]);
       } else {
         res
-          .status(404)
-          .json({ id: 1, text: "tipoCambio no existe", detail: "" });
+          .json({ id: 1, text: "El tipo de cambio no existe", detail: "" });
       }
     } catch (error: any) {
       res.status(404).json({
