@@ -17,17 +17,26 @@ const keys_1 = __importDefault(require("../keys"));
 class TipoCambioControllers {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const tipoCambios = yield database_1.default.query("SELECT TC.`fecha`," +
-                " TC.`compra`," +
-                " TC.`venta`," +
-                " TC.`estado`," +
-                " CASE WHEN TC.`estado`='A' then 'Activo' else 'Inactivo' End AS `desEstado`," +
-                " TC.`fechaCreacion`," +
-                " TC.`usuarioCreacion`" +
-                " FROM `" +
-                keys_1.default.database.database +
-                "`.`tipo-cambio` AS TC;");
-            res.json(tipoCambios);
+            try {
+                const tipoCambios = yield database_1.default.query("SELECT TC.`fecha`," +
+                    " TC.`compra`," +
+                    " TC.`venta`," +
+                    " TC.`estado`," +
+                    " CASE WHEN TC.`estado`='A' then 'Activo' else 'Inactivo' End AS `desEstado`," +
+                    " TC.`fechaCreacion`," +
+                    " TC.`usuarioCreacion`" +
+                    " FROM `" +
+                    keys_1.default.database.database +
+                    "`.`tipo-cambio` AS TC;");
+                res.json(tipoCambios);
+            }
+            catch (error) {
+                res.json({
+                    id: 0,
+                    message: "No existen tipos de cambio",
+                    detail: error.message,
+                });
+            }
         });
     }
     getOne(req, res) {
@@ -41,12 +50,11 @@ class TipoCambioControllers {
                     res.json(tipoCambio[0]);
                 }
                 else {
-                    res
-                        .json({ id: 1, text: "El tipo de cambio no existe", detail: "" });
+                    res.json({ id: 1, text: "El tipo de cambio no existe", detail: "" });
                 }
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El tipo de cambio no existe",
                     detail: error.message,
@@ -65,7 +73,7 @@ class TipoCambioControllers {
                 });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El tipo de cambio no fue registrado",
                     detail: error.message,
@@ -87,7 +95,7 @@ class TipoCambioControllers {
                 });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El tipo de cambio no fue actualizado",
                     detail: error.message,
@@ -109,7 +117,7 @@ class TipoCambioControllers {
                 });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El tipo de cambio no fue eliminado",
                     detail: error.message,

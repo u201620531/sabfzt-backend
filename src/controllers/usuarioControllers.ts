@@ -5,10 +5,18 @@ import keys from "../keys";
 
 class UsuarioControllers {
   public async list(req: Request, res: Response) {
-    const usuarios = await pool.query(
-      "SELECT * FROM `" + keys.database.database + "`.`usuario`;"
-    );
-    res.json(usuarios);
+    try {
+      const usuarios = await pool.query(
+        "SELECT * FROM `" + keys.database.database + "`.`usuario`;"
+      );
+      res.json(usuarios);
+    } catch (error: any) {
+      res.json({
+        id: 0,
+        message: "No existen usuarios",
+        detail: error.message,
+      });
+    }
   }
 
   public async getBycodigoUsuarioAndContrasena(
@@ -29,7 +37,6 @@ class UsuarioControllers {
           (value: any) => (contrasenaHash = value)
         );
         if (contrasenaHash) {
-
           res.json(usuario[0]);
         } else {
           res.json({ id: 1, text: "Contrasena incorrecta", detail: "" });
@@ -46,10 +53,7 @@ class UsuarioControllers {
     }
   }
 
-  public async getByCodigoUsuario(
-    req: Request,
-    res: Response
-  ): Promise<any> {
+  public async getByCodigoUsuario(req: Request, res: Response): Promise<any> {
     try {
       const { codigoUsuario } = req.params;
       const usuario = await pool.query(
@@ -64,7 +68,7 @@ class UsuarioControllers {
         res.json({ id: 1, text: "El usuario no existe", detail: "" });
       }
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El usuario no existe",
         detail: error.message,
@@ -80,7 +84,7 @@ class UsuarioControllers {
       );
       res.json({ id: 1, message: "El usuario fue registrado", detail: "" });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El usuario no fue registrado",
         detail: error.message,
@@ -99,7 +103,7 @@ class UsuarioControllers {
       );
       res.json({ id: 1, message: "El usuario fue actualizado", detail: "" });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El usuario no fue actualizado",
         detail: error.message,
@@ -122,7 +126,7 @@ class UsuarioControllers {
       );
       res.json({ id: 1, message: "La contrasena fue actualizada", detail: "" });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "La contrasena no fue actualizada",
         detail: error.message,
@@ -141,7 +145,7 @@ class UsuarioControllers {
       );
       res.json({ id: 1, message: "El usuario fue eliminado", detail: "" });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El usuario no fue eliminado",
         detail: error.message,

@@ -4,23 +4,31 @@ import keys from "../keys";
 
 class SubCuentaContableControllers {
   public async list(req: Request, res: Response) {
-    const SubCuentaContables = await pool.query(
-      "SELECT SCC.`idCuentaContable`," +
-        " CC.`nombre` AS `nomCuentaContable`," +
-        " SCC.`idSubCuentaContable`," +
-        " SCC.`nombre`," +
-        " SCC.`estado`," +
-        " CASE WHEN SCC.`estado`='A' then 'Activo' else 'Inactivo' End AS `desEstado`," +
-        " SCC.`fechaCreacion`," +
-        " SCC.`usuarioCreacion`" +
-        " FROM `" +
-        keys.database.database +
-        "`.`sub-cuenta-contable` AS SCC" +
-        " INNER JOIN `" +
-        keys.database.database +
-        "`.`cuenta-contable` AS CC ON SCC.`idCuentaContable` = CC.`idCuentaContable`;"
-    );
-    res.json(SubCuentaContables);
+    try {
+      const SubCuentaContables = await pool.query(
+        "SELECT SCC.`idCuentaContable`," +
+          " CC.`nombre` AS `nomCuentaContable`," +
+          " SCC.`idSubCuentaContable`," +
+          " SCC.`nombre`," +
+          " SCC.`estado`," +
+          " CASE WHEN SCC.`estado`='A' then 'Activo' else 'Inactivo' End AS `desEstado`," +
+          " SCC.`fechaCreacion`," +
+          " SCC.`usuarioCreacion`" +
+          " FROM `" +
+          keys.database.database +
+          "`.`sub-cuenta-contable` AS SCC" +
+          " INNER JOIN `" +
+          keys.database.database +
+          "`.`cuenta-contable` AS CC ON SCC.`idCuentaContable` = CC.`idCuentaContable`;"
+      );
+      res.json(SubCuentaContables);
+    } catch (error: any) {
+      res.json({
+        id: 0,
+        message: "No existen subcuentas",
+        detail: error.message,
+      });
+    }
   }
 
   public async getOne(req: Request, res: Response): Promise<any> {
@@ -35,14 +43,14 @@ class SubCuentaContableControllers {
       if (SubCuentaContable.length > 0) {
         res.json(SubCuentaContable[0]);
       } else {
-        res.status(404).json({
+        res.json({
           id: 1,
           text: "La sub cuenta contable no existe",
           detail: "",
         });
       }
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "La sub cuenta contable no existe",
         detail: error.message,
@@ -64,7 +72,7 @@ class SubCuentaContableControllers {
         detail: "",
       });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "La sub cuenta contable no fue registrada",
         detail: error.message,
@@ -87,7 +95,7 @@ class SubCuentaContableControllers {
         detail: "",
       });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "La sub cuenta contable no fue actualizada",
         detail: error.message,
@@ -110,7 +118,7 @@ class SubCuentaContableControllers {
         detail: "",
       });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "La sub cuenta contable no fue eliminada",
         detail: error.message,

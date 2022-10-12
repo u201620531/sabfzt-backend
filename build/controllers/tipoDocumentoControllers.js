@@ -25,11 +25,13 @@ class TipoDocumentoControllers {
                     " CASE WHEN `estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
                     " `tipo-documento`.`fechaCreacion`," +
                     " `tipo-documento`.`usuarioCreacion`" +
-                    " FROM `" + keys_1.default.database.database + "`.`tipo-documento`;");
+                    " FROM `" +
+                    keys_1.default.database.database +
+                    "`.`tipo-documento`;");
                 res.json(transactionTypes);
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     text: "Tipos de documento no registrados",
                     detail: error.message,
@@ -42,7 +44,9 @@ class TipoDocumentoControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idTipoDocumento } = req.params;
-                const tipoDocumento = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`tipo-documento` WHERE idTipoDocumento = ?;", [idTipoDocumento]);
+                const tipoDocumento = yield database_1.default.query("SELECT * FROM `" +
+                    keys_1.default.database.database +
+                    "`.`tipo-documento` WHERE idTipoDocumento = ?;", [idTipoDocumento]);
                 if (tipoDocumento.length > 0) {
                     res.json(tipoDocumento[0]);
                 }
@@ -55,7 +59,7 @@ class TipoDocumentoControllers {
                 }
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El tipo de documento no existe",
                     detail: error.message,
@@ -68,15 +72,15 @@ class TipoDocumentoControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { desTipoDocumento } = req.params;
-                const query = "SELECT * FROM `" + keys_1.default.database.database + "`.`tipo-documento` WHERE descripcion LIKE ";
+                const query = "SELECT * FROM `" +
+                    keys_1.default.database.database +
+                    "`.`tipo-documento` WHERE descripcion LIKE ";
                 const tipoDocumento = yield database_1.default.query(`${query} '%${desTipoDocumento}%'`);
                 if (tipoDocumento.length > 0) {
                     res.json(tipoDocumento[0]);
                 }
                 else {
-                    res
-                        .status(404)
-                        .json({
+                    res.json({
                         id: 1,
                         message: "El tipo de documento no existe",
                         detail: "",
@@ -84,7 +88,7 @@ class TipoDocumentoControllers {
                 }
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El tipo de documento no existe",
                     detail: error.message,
@@ -95,9 +99,7 @@ class TipoDocumentoControllers {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield database_1.default.query("INSERT INTO `" + keys_1.default.database.database + "`.`tipo-documento` set ?", [
-                    req.body,
-                ]);
+                yield database_1.default.query("INSERT INTO `" + keys_1.default.database.database + "`.`tipo-documento` set ?", [req.body]);
                 res.json({
                     id: 1,
                     message: "El tipo de documento fue registrado",
@@ -105,7 +107,7 @@ class TipoDocumentoControllers {
                 });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El tipo de documento no fue registrado",
                     detail: error.message,
@@ -117,7 +119,9 @@ class TipoDocumentoControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idTipoDocumento } = req.params;
-                yield database_1.default.query("UPDATE `" + keys_1.default.database.database + "`.`tipo-documento` SET ? WHERE idTipoDocumento = ?;", [req.body, idTipoDocumento]);
+                yield database_1.default.query("UPDATE `" +
+                    keys_1.default.database.database +
+                    "`.`tipo-documento` SET ? WHERE idTipoDocumento = ?;", [req.body, idTipoDocumento]);
                 res.json({
                     id: 1,
                     message: "El tipo de documento fue actualizado",
@@ -125,7 +129,7 @@ class TipoDocumentoControllers {
                 });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El tipo de documento no fue actualizado",
                     detail: error.message,
@@ -137,7 +141,9 @@ class TipoDocumentoControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idTipoDocumento } = req.params;
-                yield database_1.default.query("DELETE FROM `" + keys_1.default.database.database + "`.`tipo-documento` WHERE idTipoDocumento = ?;", [idTipoDocumento]);
+                yield database_1.default.query("DELETE FROM `" +
+                    keys_1.default.database.database +
+                    "`.`tipo-documento` WHERE idTipoDocumento = ?;", [idTipoDocumento]);
                 res.json({
                     id: 1,
                     message: "El tipo de documento fue eliminado",
@@ -145,7 +151,7 @@ class TipoDocumentoControllers {
                 });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El tipo de documento no fue eliminado",
                     detail: error.message,

@@ -4,40 +4,54 @@ import keys from "../keys";
 
 class EmpleadoControllers {
   public async list(req: Request, res: Response) {
-    const empleadoes = await pool.query(
-      "SELECT EM.`idEmpleado`," +
-        " EM.`idCargo`," +
-        " CEM.`descripcion` As `desCargo`," +
-        " EM.`nombre`," +
-        " EM.`apellido`," +
-        " EM.`direccion`," +
-        " EM.`telefono`," +
-        " EM.`email1`," +
-        " EM.`email2`," +
-        " EM.`fechaNacimiento`," +
-        " EM.`estado`," +
-        " EM.`fechaCreacion`," +
-        " EM.`usuarioCreacion`" +
-        " FROM `" + keys.database.database + "`.`empleado` AS EM" +
-        " INNER JOIN `" + keys.database.database + "`.`soporte` AS CEM ON EM.`idCargo` = CEM.valor AND CEM.idSoporte='CEM';"
-    );
-    res.json(empleadoes);
+    try {
+      const empleadoes = await pool.query(
+        "SELECT EM.`idEmpleado`," +
+          " EM.`idCargo`," +
+          " CEM.`descripcion` As `desCargo`," +
+          " EM.`nombre`," +
+          " EM.`apellido`," +
+          " EM.`direccion`," +
+          " EM.`telefono`," +
+          " EM.`email1`," +
+          " EM.`email2`," +
+          " EM.`fechaNacimiento`," +
+          " EM.`estado`," +
+          " EM.`fechaCreacion`," +
+          " EM.`usuarioCreacion`" +
+          " FROM `" +
+          keys.database.database +
+          "`.`empleado` AS EM" +
+          " INNER JOIN `" +
+          keys.database.database +
+          "`.`soporte` AS CEM ON EM.`idCargo` = CEM.valor AND CEM.idSoporte='CEM';"
+      );
+      res.json(empleadoes);
+    } catch (error: any) {
+      res.json({
+        id: 0,
+        message: "No existen empleados",
+        detail: error.message,
+      });
+    }
   }
 
   public async getOne(req: Request, res: Response): Promise<any> {
     try {
       const { idEmpleado } = req.params;
       const empleado = await pool.query(
-        "SELECT * FROM `" + keys.database.database + "`.`empleado` WHERE idEmpleado = ?;",
+        "SELECT * FROM `" +
+          keys.database.database +
+          "`.`empleado` WHERE idEmpleado = ?;",
         [idEmpleado]
       );
       if (empleado.length > 0) {
         res.json(empleado[0]);
       } else {
-        res.status(404).json({ id: 1, text: "El empleado no existe", detail: "" });
+        res.json({ id: 1, text: "El empleado no existe", detail: "" });
       }
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El empleado no existe",
         detail: error.message,
@@ -49,17 +63,22 @@ class EmpleadoControllers {
     try {
       let id_number = 1;
       const getMaxId = await pool.query(
-        "SELECT COUNT(*) idEmpleado FROM `" + keys.database.database + "`.`empleado`;"
+        "SELECT COUNT(*) idEmpleado FROM `" +
+          keys.database.database +
+          "`.`empleado`;"
       );
       if (getMaxId.length > 0) {
         id_number = getMaxId[0].id + 1;
       }
       const idEmpleado = "E" + id_number.toString().padStart(9, "0");
       req.body.idEmpleado = idEmpleado;
-      await pool.query("INSERT INTO `" + keys.database.database + "`.`empleado` set ?", [req.body]);
+      await pool.query(
+        "INSERT INTO `" + keys.database.database + "`.`empleado` set ?",
+        [req.body]
+      );
       res.json({ id: 1, message: "El empleado fue registrado", detail: "" });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El empleado no fue registrado",
         detail: error.message,
@@ -71,12 +90,14 @@ class EmpleadoControllers {
     try {
       const { idEmpleado } = req.params;
       await pool.query(
-        "UPDATE `" + keys.database.database + "`.`empleado` SET ? WHERE idEmpleado = ?;",
+        "UPDATE `" +
+          keys.database.database +
+          "`.`empleado` SET ? WHERE idEmpleado = ?;",
         [req.body, idEmpleado]
       );
       res.json({ id: 1, message: "El empleado fue actualizado", detail: "" });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El empleado no fue actualizado",
         detail: error.message,
@@ -88,12 +109,14 @@ class EmpleadoControllers {
     try {
       const { idEmpleado } = req.params;
       await pool.query(
-        "DELETE FROM `" + keys.database.database + "`.`empleado` WHERE idEmpleado = ?;",
+        "DELETE FROM `" +
+          keys.database.database +
+          "`.`empleado` WHERE idEmpleado = ?;",
         [idEmpleado]
       );
       res.json({ id: 1, message: "El empleado fue eliminado", detail: "" });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El empleado no fue eliminado",
         detail: error.message,

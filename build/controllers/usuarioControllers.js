@@ -18,8 +18,17 @@ const keys_1 = __importDefault(require("../keys"));
 class UsuarioControllers {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const usuarios = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`usuario`;");
-            res.json(usuarios);
+            try {
+                const usuarios = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`usuario`;");
+                res.json(usuarios);
+            }
+            catch (error) {
+                res.json({
+                    id: 0,
+                    message: "No existen usuarios",
+                    detail: error.message,
+                });
+            }
         });
     }
     getBycodigoUsuarioAndContrasena(req, res) {
@@ -67,7 +76,7 @@ class UsuarioControllers {
                 }
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El usuario no existe",
                     detail: error.message,
@@ -82,7 +91,7 @@ class UsuarioControllers {
                 res.json({ id: 1, message: "El usuario fue registrado", detail: "" });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El usuario no fue registrado",
                     detail: error.message,
@@ -100,7 +109,7 @@ class UsuarioControllers {
                 res.json({ id: 1, message: "El usuario fue actualizado", detail: "" });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El usuario no fue actualizado",
                     detail: error.message,
@@ -119,7 +128,7 @@ class UsuarioControllers {
                 res.json({ id: 1, message: "La contrasena fue actualizada", detail: "" });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "La contrasena no fue actualizada",
                     detail: error.message,
@@ -137,7 +146,7 @@ class UsuarioControllers {
                 res.json({ id: 1, message: "El usuario fue eliminado", detail: "" });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El usuario no fue eliminado",
                     detail: error.message,

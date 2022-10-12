@@ -4,18 +4,26 @@ import keys from "../keys";
 
 class CuentaContableControllers {
   public async list(req: Request, res: Response) {
-    const cuentaContables = await pool.query(
-      "SELECT CC.`idCuentaContable`," +
-        " CC.`nombre`," +
-        " CC.`estado`," +
-        " CASE WHEN CC.`estado`='A' then 'Activo' else 'Inactivo' End AS `desEstado`," +
-        " CC.`fechaCreacion`," +
-        " CC.`usuarioCreacion`" +
-        " FROM `" +
-        keys.database.database +
-        "`.`cuenta-contable` AS CC;"
-    );
-    res.json(cuentaContables);
+    try {
+      const cuentaContables = await pool.query(
+        "SELECT CC.`idCuentaContable`," +
+          " CC.`nombre`," +
+          " CC.`estado`," +
+          " CASE WHEN CC.`estado`='A' then 'Activo' else 'Inactivo' End AS `desEstado`," +
+          " CC.`fechaCreacion`," +
+          " CC.`usuarioCreacion`" +
+          " FROM `" +
+          keys.database.database +
+          "`.`cuenta-contable` AS CC;"
+      );
+      res.json(cuentaContables);
+    } catch (error: any) {
+      res.json({
+        id: 0,
+        message: "No existen cuentas contables",
+        detail: error.message,
+      });
+    }
   }
 
   public async getOne(req: Request, res: Response): Promise<any> {
@@ -30,12 +38,10 @@ class CuentaContableControllers {
       if (cuentaContable.length > 0) {
         res.json(cuentaContable[0]);
       } else {
-        res
-          .status(404)
-          .json({ id: 1, text: "La cuenta contable no existe", detail: "" });
+        res.json({ id: 1, text: "La cuenta contable no existe", detail: "" });
       }
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "La cuenta contable no existe",
         detail: error.message,
@@ -55,7 +61,7 @@ class CuentaContableControllers {
         detail: "",
       });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "La cuenta contable no fue registrada",
         detail: error.message,
@@ -78,7 +84,7 @@ class CuentaContableControllers {
         detail: "",
       });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "La cuenta contable no fue actualizada",
         detail: error.message,
@@ -101,7 +107,7 @@ class CuentaContableControllers {
         detail: "",
       });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "La cuenta contable no fue eliminada",
         detail: error.message,

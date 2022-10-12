@@ -17,26 +17,35 @@ const keys_1 = __importDefault(require("../keys"));
 class PerfilUsuarioControllers {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const perfiles = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`perfil-usuario`;");
-            res.json(perfiles);
+            try {
+                const perfiles = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`perfil-usuario`;");
+                res.json(perfiles);
+            }
+            catch (error) {
+                res.json({
+                    id: 0,
+                    message: "No existen perfiles de usuario",
+                    detail: error.message,
+                });
+            }
         });
     }
     getByidPerfilUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idPerfilUsuario } = req.params;
-                const perfilUsuario = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`perfil-usuario` WHERE idPerfilUsuario = ?;", [idPerfilUsuario]);
+                const perfilUsuario = yield database_1.default.query("SELECT * FROM `" +
+                    keys_1.default.database.database +
+                    "`.`perfil-usuario` WHERE idPerfilUsuario = ?;", [idPerfilUsuario]);
                 if (perfilUsuario.length > 0) {
                     res.json(perfilUsuario);
                 }
                 else {
-                    res
-                        .status(404)
-                        .json({ id: 1, text: "perfil de usuario no existe", detail: "" });
+                    res.json({ id: 1, text: "perfil de usuario no existe", detail: "" });
                 }
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El perfil de usuario no existe",
                     detail: error.message,
@@ -47,9 +56,7 @@ class PerfilUsuarioControllers {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield database_1.default.query("INSERT INTO `" + keys_1.default.database.database + "`.`perfil-usuario` set ?", [
-                    req.body,
-                ]);
+                yield database_1.default.query("INSERT INTO `" + keys_1.default.database.database + "`.`perfil-usuario` set ?", [req.body]);
                 res.json({
                     id: 1,
                     message: "El perfil de usuario fue registrado",
@@ -57,7 +64,7 @@ class PerfilUsuarioControllers {
                 });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El perfil de usuario no fue registrado",
                     detail: error.message,
@@ -69,7 +76,9 @@ class PerfilUsuarioControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idPerfilUsuario } = req.body;
-                yield database_1.default.query("UPDATE `" + keys_1.default.database.database + "`.`perfil-usuario` SET ? WHERE idPerfilUsuario = ?;", [idPerfilUsuario]);
+                yield database_1.default.query("UPDATE `" +
+                    keys_1.default.database.database +
+                    "`.`perfil-usuario` SET ? WHERE idPerfilUsuario = ?;", [idPerfilUsuario]);
                 res.json({
                     id: 1,
                     message: "El perfil de usuario fue actualizado",
@@ -77,7 +86,7 @@ class PerfilUsuarioControllers {
                 });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El perfil de usuario no fue actualizado",
                     detail: error.message,
@@ -89,7 +98,9 @@ class PerfilUsuarioControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idPerfilUsuario } = req.params;
-                yield database_1.default.query("DELETE FROM `" + keys_1.default.database.database + "`.`perfil-usuario` WHERE idPerfilUsuario = ?;", [idPerfilUsuario]);
+                yield database_1.default.query("DELETE FROM `" +
+                    keys_1.default.database.database +
+                    "`.`perfil-usuario` WHERE idPerfilUsuario = ?;", [idPerfilUsuario]);
                 res.json({
                     id: 1,
                     message: "El perfil de usuario fue eliminado",
@@ -97,7 +108,7 @@ class PerfilUsuarioControllers {
                 });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El perfil de usuario no fue eliminado",
                     detail: error.message,

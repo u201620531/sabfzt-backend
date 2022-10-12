@@ -4,24 +4,36 @@ import keys from "../keys";
 
 class ModuloControllers {
   public async list(req: Request, res: Response) {
-    const modulos = await pool.query("SELECT * FROM `" + keys.database.database + "`.`modulo`;");
-    res.json(modulos);
+    try {
+      const modulos = await pool.query(
+        "SELECT * FROM `" + keys.database.database + "`.`modulo`;"
+      );
+      res.json(modulos);
+    } catch (error: any) {
+      res.json({
+        id: 0,
+        message: "No existen modulos",
+        detail: error.message,
+      });
+    }
   }
 
   public async getByIdModulo(req: Request, res: Response): Promise<any> {
     try {
       const { idModulo } = req.params;
       const modulo = await pool.query(
-        "SELECT * FROM `" + keys.database.database + "`.`modulo` WHERE idModulo = ?;",
+        "SELECT * FROM `" +
+          keys.database.database +
+          "`.`modulo` WHERE idModulo = ?;",
         [idModulo]
       );
       if (modulo.length > 0) {
         res.json(modulo);
       } else {
-        res.status(404).json({ id: 1, text: "modulo no existe", detail: "" });
+        res.json({ id: 1, text: "modulo no existe", detail: "" });
       }
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El modulo no existe",
         detail: error.message,
@@ -33,22 +45,22 @@ class ModuloControllers {
     try {
       const { idPerfilUsuario } = req.params;
       const modulos = await pool.query(
-        "SELECT * FROM `" + keys.database.database + "`.`modulo` WHERE idPerfilUsuario = ?;",
+        "SELECT * FROM `" +
+          keys.database.database +
+          "`.`modulo` WHERE idPerfilUsuario = ?;",
         [idPerfilUsuario]
       );
       if (modulos.length > 0) {
         res.json(modulos);
       } else {
-        res
-          .status(404)
-          .json({
-            id: 1,
-            text: "Perfil de usuario no tiene modulos asignados",
-            detail: "",
-          });
+        res.json({
+          id: 1,
+          text: "Perfil de usuario no tiene modulos asignados",
+          detail: "",
+        });
       }
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El modulo no existe",
         detail: error.message,
@@ -58,10 +70,13 @@ class ModuloControllers {
 
   public async create(req: Request, res: Response): Promise<void> {
     try {
-      await pool.query("INSERT INTO `" + keys.database.database + "`.`modulo` set ?", [req.body]);
+      await pool.query(
+        "INSERT INTO `" + keys.database.database + "`.`modulo` set ?",
+        [req.body]
+      );
       res.json({ id: 1, message: "El modulo fue registrado", detail: "" });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El modulo no fue registrado",
         detail: error.message,
@@ -72,13 +87,15 @@ class ModuloControllers {
   public async update(req: Request, res: Response): Promise<void> {
     try {
       const { idModulo, description } = req.body;
-      await pool.query("UPDATE `" + keys.database.database + "`.`modulo` SET ? WHERE idModulo = ?;", [
-        description,
-        idModulo,
-      ]);
+      await pool.query(
+        "UPDATE `" +
+          keys.database.database +
+          "`.`modulo` SET ? WHERE idModulo = ?;",
+        [description, idModulo]
+      );
       res.json({ id: 1, message: "El modulo fue actualizado", detail: "" });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El modulo no fue actualizado",
         detail: error.message,
@@ -89,12 +106,15 @@ class ModuloControllers {
   public async delete(req: Request, res: Response): Promise<void> {
     try {
       const { idModulo } = req.params;
-      await pool.query("DELETE FROM `" + keys.database.database + "`.`modulo` WHERE idModulo = ?;", [
-        idModulo,
-      ]);
+      await pool.query(
+        "DELETE FROM `" +
+          keys.database.database +
+          "`.`modulo` WHERE idModulo = ?;",
+        [idModulo]
+      );
       res.json({ id: 1, message: "El modulo fue eliminado", detail: "" });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El modulo no fue eliminado",
         detail: error.message,

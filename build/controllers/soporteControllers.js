@@ -17,26 +17,39 @@ const keys_1 = __importDefault(require("../keys"));
 class SoporteControllers {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const soportes = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`soporte`;");
-            res.json(soportes);
+            try {
+                const soportes = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`soporte`;");
+                res.json(soportes);
+            }
+            catch (error) {
+                res.json({
+                    id: 0,
+                    message: "No existen soportes",
+                    detail: error.message,
+                });
+            }
         });
     }
     getByidSoporte(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idSoporte } = req.params;
-                const soporte = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`soporte` WHERE idSoporte = ?;", [idSoporte]);
+                const soporte = yield database_1.default.query("SELECT * FROM `" +
+                    keys_1.default.database.database +
+                    "`.`soporte` WHERE idSoporte = ?;", [idSoporte]);
                 if (soporte.length > 0) {
                     res.json(soporte);
                 }
                 else {
-                    res
-                        .status(404)
-                        .json({ id: 1, text: "soporte no existe", detail: "" });
+                    res.json({
+                        id: 1,
+                        text: "El registro de soporte no existe",
+                        detail: "",
+                    });
                 }
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El registro de soporte no existe",
                     detail: error.message,
@@ -48,18 +61,18 @@ class SoporteControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idSoporte, valor } = req.params;
-                const soporte = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`soporte` WHERE idSoporte = ? AND valor = ?;", [idSoporte, valor]);
+                const soporte = yield database_1.default.query("SELECT * FROM `" +
+                    keys_1.default.database.database +
+                    "`.`soporte` WHERE idSoporte = ? AND valor = ?;", [idSoporte, valor]);
                 if (soporte.length > 0) {
                     res.json(soporte);
                 }
                 else {
-                    res
-                        .status(404)
-                        .json({ id: 1, text: "soporte no existe", detail: "" });
+                    res.json({ id: 1, text: "soporte no existe", detail: "" });
                 }
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El registro de soporte no existe",
                     detail: error.message,
@@ -70,13 +83,15 @@ class SoporteControllers {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield database_1.default.query("INSERT INTO `" + keys_1.default.database.database + "`.`soporte` set ?", [
-                    req.body,
-                ]);
-                res.json({ id: 1, message: "El registro de soporte fue registrado", detail: "" });
+                yield database_1.default.query("INSERT INTO `" + keys_1.default.database.database + "`.`soporte` set ?", [req.body]);
+                res.json({
+                    id: 1,
+                    message: "El registro de soporte fue registrado",
+                    detail: "",
+                });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El registro de soporte no fue registrado",
                     detail: error.message,
@@ -88,11 +103,17 @@ class SoporteControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idSoporte, description } = req.body;
-                yield database_1.default.query("UPDATE `" + keys_1.default.database.database + "`.`soporte` SET ? WHERE idSoporte = ?;", [description, idSoporte]);
-                res.json({ id: 1, message: "El registro de soporte fue actualizado", detail: "" });
+                yield database_1.default.query("UPDATE `" +
+                    keys_1.default.database.database +
+                    "`.`soporte` SET ? WHERE idSoporte = ?;", [description, idSoporte]);
+                res.json({
+                    id: 1,
+                    message: "El registro de soporte fue actualizado",
+                    detail: "",
+                });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El registro de soporte no fue actualizado",
                     detail: error.message,
@@ -104,13 +125,17 @@ class SoporteControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idSoporte } = req.params;
-                yield database_1.default.query("DELETE FROM `" + keys_1.default.database.database + "`.`soporte` WHERE idSoporte = ?;", [
-                    idSoporte,
-                ]);
-                res.json({ id: 1, message: "El registro de soporte fue eliminado", detail: "" });
+                yield database_1.default.query("DELETE FROM `" +
+                    keys_1.default.database.database +
+                    "`.`soporte` WHERE idSoporte = ?;", [idSoporte]);
+                res.json({
+                    id: 1,
+                    message: "El registro de soporte fue eliminado",
+                    detail: "",
+                });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El registro de soporte no fue eliminado",
                     detail: error.message,

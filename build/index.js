@@ -23,6 +23,7 @@ const config_1 = require("./config");
 const tipoCambioRoutes_1 = __importDefault(require("./routes/tipoCambioRoutes"));
 const cuentaContableRoutes_1 = __importDefault(require("./routes/cuentaContableRoutes"));
 const subCuentaContableRoutes_1 = __importDefault(require("./routes/subCuentaContableRoutes"));
+const auditoriaRoutes_1 = __importDefault(require("./routes/auditoriaRoutes"));
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -55,6 +56,7 @@ class Server {
         this.app.use("/api/tipocambios", tipoCambioRoutes_1.default);
         this.app.use("/api/cuentacontables", cuentaContableRoutes_1.default);
         this.app.use("/api/subcuentacontables", subCuentaContableRoutes_1.default);
+        this.app.use("/api/auditorias", auditoriaRoutes_1.default);
     }
     start() {
         this.app.listen(this.app.get("port"), () => {

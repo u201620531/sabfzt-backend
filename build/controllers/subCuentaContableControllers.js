@@ -17,21 +17,30 @@ const keys_1 = __importDefault(require("../keys"));
 class SubCuentaContableControllers {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const SubCuentaContables = yield database_1.default.query("SELECT SCC.`idCuentaContable`," +
-                " CC.`nombre` AS `nomCuentaContable`," +
-                " SCC.`idSubCuentaContable`," +
-                " SCC.`nombre`," +
-                " SCC.`estado`," +
-                " CASE WHEN SCC.`estado`='A' then 'Activo' else 'Inactivo' End AS `desEstado`," +
-                " SCC.`fechaCreacion`," +
-                " SCC.`usuarioCreacion`" +
-                " FROM `" +
-                keys_1.default.database.database +
-                "`.`sub-cuenta-contable` AS SCC" +
-                " INNER JOIN `" +
-                keys_1.default.database.database +
-                "`.`cuenta-contable` AS CC ON SCC.`idCuentaContable` = CC.`idCuentaContable`;");
-            res.json(SubCuentaContables);
+            try {
+                const SubCuentaContables = yield database_1.default.query("SELECT SCC.`idCuentaContable`," +
+                    " CC.`nombre` AS `nomCuentaContable`," +
+                    " SCC.`idSubCuentaContable`," +
+                    " SCC.`nombre`," +
+                    " SCC.`estado`," +
+                    " CASE WHEN SCC.`estado`='A' then 'Activo' else 'Inactivo' End AS `desEstado`," +
+                    " SCC.`fechaCreacion`," +
+                    " SCC.`usuarioCreacion`" +
+                    " FROM `" +
+                    keys_1.default.database.database +
+                    "`.`sub-cuenta-contable` AS SCC" +
+                    " INNER JOIN `" +
+                    keys_1.default.database.database +
+                    "`.`cuenta-contable` AS CC ON SCC.`idCuentaContable` = CC.`idCuentaContable`;");
+                res.json(SubCuentaContables);
+            }
+            catch (error) {
+                res.json({
+                    id: 0,
+                    message: "No existen subcuentas",
+                    detail: error.message,
+                });
+            }
         });
     }
     getOne(req, res) {
@@ -45,7 +54,7 @@ class SubCuentaContableControllers {
                     res.json(SubCuentaContable[0]);
                 }
                 else {
-                    res.status(404).json({
+                    res.json({
                         id: 1,
                         text: "La sub cuenta contable no existe",
                         detail: "",
@@ -53,7 +62,7 @@ class SubCuentaContableControllers {
                 }
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "La sub cuenta contable no existe",
                     detail: error.message,
@@ -74,7 +83,7 @@ class SubCuentaContableControllers {
                 });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "La sub cuenta contable no fue registrada",
                     detail: error.message,
@@ -96,7 +105,7 @@ class SubCuentaContableControllers {
                 });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "La sub cuenta contable no fue actualizada",
                     detail: error.message,
@@ -118,7 +127,7 @@ class SubCuentaContableControllers {
                 });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "La sub cuenta contable no fue eliminada",
                     detail: error.message,

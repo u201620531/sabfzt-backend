@@ -17,26 +17,35 @@ const keys_1 = __importDefault(require("../keys"));
 class MonedaControllers {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const monedas = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`moneda`;");
-            res.json(monedas);
+            try {
+                const monedas = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`moneda`;");
+                res.json(monedas);
+            }
+            catch (error) {
+                res.json({
+                    id: 0,
+                    message: "No existen monedas",
+                    detail: error.message,
+                });
+            }
         });
     }
     getOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idMoneda } = req.params;
-                const moneda = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`moneda` WHERE idMoneda = ?;", [idMoneda]);
+                const moneda = yield database_1.default.query("SELECT * FROM `" +
+                    keys_1.default.database.database +
+                    "`.`moneda` WHERE idMoneda = ?;", [idMoneda]);
                 if (moneda.length > 0) {
                     res.json(moneda[0]);
                 }
                 else {
-                    res
-                        .status(404)
-                        .json({ id: 1, text: "moneda no existe", detail: "" });
+                    res.json({ id: 1, text: "moneda no existe", detail: "" });
                 }
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "La moneda no existe",
                     detail: error.message,
@@ -47,13 +56,11 @@ class MonedaControllers {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield database_1.default.query("INSERT INTO `" + keys_1.default.database.database + "`.`moneda` set ?", [
-                    req.body,
-                ]);
+                yield database_1.default.query("INSERT INTO `" + keys_1.default.database.database + "`.`moneda` set ?", [req.body]);
                 res.json({ id: 1, message: "La moneda fue registrado", detail: "" });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "La moneda no fue registrado",
                     detail: error.message,
@@ -65,14 +72,13 @@ class MonedaControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idMoneda } = req.params;
-                yield database_1.default.query("UPDATE `" + keys_1.default.database.database + "`.`moneda` SET ? WHERE idMoneda = ?;", [
-                    req.body,
-                    idMoneda,
-                ]);
+                yield database_1.default.query("UPDATE `" +
+                    keys_1.default.database.database +
+                    "`.`moneda` SET ? WHERE idMoneda = ?;", [req.body, idMoneda]);
                 res.json({ id: 1, message: "La moneda fue actualizado", detail: "" });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "La moneda no fue actualizado",
                     detail: error.message,
@@ -84,13 +90,13 @@ class MonedaControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { idMoneda } = req.params;
-                yield database_1.default.query("DELETE FROM `" + keys_1.default.database.database + "`.`moneda` WHERE idMoneda = ?;", [
-                    idMoneda,
-                ]);
+                yield database_1.default.query("DELETE FROM `" +
+                    keys_1.default.database.database +
+                    "`.`moneda` WHERE idMoneda = ?;", [idMoneda]);
                 res.json({ id: 1, message: "La moneda fue eliminado", detail: "" });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "La moneda no fue eliminado",
                     detail: error.message,

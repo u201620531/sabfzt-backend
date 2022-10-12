@@ -4,74 +4,82 @@ import keys from "../keys";
 
 class DetallePlantillaComprobanteControllers {
   public async list(req: Request, res: Response) {
-    const { idPlantillaComprobante } = req.params;
+    try {
+      const { idPlantillaComprobante } = req.params;
 
-    const queryDetallePlantilla =
-      idPlantillaComprobante === "0"
-        ? "SELECT '' AS `select`, '' AS `idPlantillaComprobante`," +
-          " C.`idComprobante`," +
-          " C.`serie`," +
-          " C.`correlativo`," +
-          " C.`idProveedor`," +
-          " P.`nroDocumento`," +
-          " P.`razonSocial`," +
-          " C.`idComprobante`," +
-          " C.`fechaEmision`," +
-          " C.`idFormaPago`," +
-          " FP.`descripcion` AS `desFormaPago`," +
-          " C.`importeTotal`," +
-          " C.`tipoCambio,`," +
-          " '' AS `detalle`," +
-          " C.`estado`" +
-          " FROM `" +
-          keys.database.database +
-          "`.`comprobante` AS C" +
-          " INNER JOIN `" +
-          keys.database.database +
-          "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
-          " INNER JOIN `" +
-          keys.database.database +
-          "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
-          " WHERE C.`estado` = 'A'" +
-          " AND C.`idComprobante` NOT IN (SELECT `idComprobante` FROM " +
-          keys.database.database +
-          ".`detalle-plantilla-comprobante`);"
-        : "SELECT '1' AS `select`, DPC.`idPlantillaComprobante`," +
-          " DPC.`idComprobante`," +
-          " C.`serie`," +
-          " C.`correlativo`," +
-          " C.`idProveedor`," +
-          " P.`nroDocumento`," +
-          " P.`razonSocial`," +
-          " C.`idComprobante`," +
-          " C.`fechaEmision`," +
-          " C.`idFormaPago`," +
-          " FP.`descripcion` AS `desFormaPago`," +
-          " C.`importeTotal`," +
-          " C.`tipoCambio`," +
-          " DPC.`detalle`," +
-          " DPC.`estado`," +
-          " CASE WHEN DPC.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`" +
-          " FROM `" +
-          keys.database.database +
-          "`.`detalle-plantilla-comprobante` AS DPC" +
-          " INNER JOIN `" +
-          keys.database.database +
-          "`.`comprobante` AS C ON DPC.`idComprobante` = C.`idComprobante`" +
-          " INNER JOIN `" +
-          keys.database.database +
-          "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
-          " INNER JOIN `" +
-          keys.database.database +
-          "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
-          " WHERE DPC.`idPlantillaComprobante` = '" +
-          idPlantillaComprobante +
-          "';";
+      const queryDetallePlantilla =
+        idPlantillaComprobante === "0"
+          ? "SELECT '' AS `select`, '' AS `idPlantillaComprobante`," +
+            " C.`idComprobante`," +
+            " C.`serie`," +
+            " C.`correlativo`," +
+            " C.`idProveedor`," +
+            " P.`nroDocumento`," +
+            " P.`razonSocial`," +
+            " C.`idComprobante`," +
+            " C.`fechaEmision`," +
+            " C.`idFormaPago`," +
+            " FP.`descripcion` AS `desFormaPago`," +
+            " C.`importeTotal`," +
+            " C.`tipoCambio,`," +
+            " '' AS `detalle`," +
+            " C.`estado`" +
+            " FROM `" +
+            keys.database.database +
+            "`.`comprobante` AS C" +
+            " INNER JOIN `" +
+            keys.database.database +
+            "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
+            " INNER JOIN `" +
+            keys.database.database +
+            "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
+            " WHERE C.`estado` = 'A'" +
+            " AND C.`idComprobante` NOT IN (SELECT `idComprobante` FROM " +
+            keys.database.database +
+            ".`detalle-plantilla-comprobante`);"
+          : "SELECT '1' AS `select`, DPC.`idPlantillaComprobante`," +
+            " DPC.`idComprobante`," +
+            " C.`serie`," +
+            " C.`correlativo`," +
+            " C.`idProveedor`," +
+            " P.`nroDocumento`," +
+            " P.`razonSocial`," +
+            " C.`idComprobante`," +
+            " C.`fechaEmision`," +
+            " C.`idFormaPago`," +
+            " FP.`descripcion` AS `desFormaPago`," +
+            " C.`importeTotal`," +
+            " C.`tipoCambio`," +
+            " DPC.`detalle`," +
+            " DPC.`estado`," +
+            " CASE WHEN DPC.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`" +
+            " FROM `" +
+            keys.database.database +
+            "`.`detalle-plantilla-comprobante` AS DPC" +
+            " INNER JOIN `" +
+            keys.database.database +
+            "`.`comprobante` AS C ON DPC.`idComprobante` = C.`idComprobante`" +
+            " INNER JOIN `" +
+            keys.database.database +
+            "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
+            " INNER JOIN `" +
+            keys.database.database +
+            "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
+            " WHERE DPC.`idPlantillaComprobante` = '" +
+            idPlantillaComprobante +
+            "';";
 
-    const DetallePlantillaComprobantes = await pool.query(
-      queryDetallePlantilla
-    );
-    res.json(DetallePlantillaComprobantes);
+      const DetallePlantillaComprobantes = await pool.query(
+        queryDetallePlantilla
+      );
+      res.json(DetallePlantillaComprobantes);
+    } catch (error: any) {
+      res.json({
+        id: 0,
+        message: "No existen comprobantes",
+        detail: error.message,
+      });
+    }
   }
 
   public async getOne(req: Request, res: Response): Promise<any> {
@@ -86,14 +94,14 @@ class DetallePlantillaComprobanteControllers {
       if (DetallePlantillaComprobante.length > 0) {
         res.json(DetallePlantillaComprobante[0]);
       } else {
-        res.status(404).json({
+        res.json({
           id: 1,
           text: "El detalle de la plantilla no existe",
           detail: "",
         });
       }
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El detalle de la plantilla no existe",
         detail: error.message,
@@ -115,7 +123,7 @@ class DetallePlantillaComprobanteControllers {
         detail: "",
       });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El detalle de la plantilla no fue registrada",
         detail: error.message,
@@ -138,7 +146,7 @@ class DetallePlantillaComprobanteControllers {
         detail: "",
       });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El detalle de la plantilla no fue actualizada",
         detail: error.message,
@@ -161,7 +169,7 @@ class DetallePlantillaComprobanteControllers {
         detail: "",
       });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El detalle de la plantilla no fue actualizada",
         detail: error.message,
@@ -184,7 +192,7 @@ class DetallePlantillaComprobanteControllers {
         detail: "",
       });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El detalle de la plantilla no fue eliminada",
         detail: error.message,
@@ -207,7 +215,7 @@ class DetallePlantillaComprobanteControllers {
         detail: "",
       });
     } catch (error: any) {
-      res.status(404).json({
+      res.json({
         id: 0,
         message: "El detalle de la plantilla no fue eliminada",
         detail: error.message,

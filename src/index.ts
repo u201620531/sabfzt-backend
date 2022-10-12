@@ -19,6 +19,7 @@ import { PORT } from "./config";
 import tipoCambioRoutes from "./routes/tipoCambioRoutes";
 import cuentaContableRoutes from "./routes/cuentaContableRoutes";
 import subCuentaContableRoutes from "./routes/subCuentaContableRoutes";
+import auditoriaRoutes from "./routes/auditoriaRoutes";
 
 class Server {
   public app: Application;
@@ -58,6 +59,7 @@ class Server {
     this.app.use("/api/tipocambios", tipoCambioRoutes);
     this.app.use("/api/cuentacontables", cuentaContableRoutes);
     this.app.use("/api/subcuentacontables", subCuentaContableRoutes);
+    this.app.use("/api/auditorias", auditoriaRoutes);
   }
 
   start(): void {

@@ -17,114 +17,132 @@ const keys_1 = __importDefault(require("../keys"));
 class ComprobanteControllers {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const comprobantes = yield database_1.default.query("SELECT C.`idComprobante`," +
-                " CONCAT(C.`serie`, '-', C.`correlativo`) AS `nroDocumento`," +
-                " C.`idProveedor`," +
-                " P.`nroDocumento` AS `nroDocumentoProveedor`," +
-                " P.`razonSocial`," +
-                " C.`idTipoDocumento`," +
-                " TD.`descripcion` AS `desTipoDocumento`," +
-                " C.`idFormaPago`," +
-                " FP.`descripcion` AS `desFormaPago`," +
-                " C.`fechaEmision`," +
-                " C.`fechaVencimiento`," +
-                " C.`totalGravadas`," +
-                " C.`totalInafectas`," +
-                " C.`totalExoneradas`," +
-                " C.`totalExportacion`," +
-                " C.`valorCompra`," +
-                " C.`igv`," +
-                " C.`isc`," +
-                " C.`otrosTributos`," +
-                " C.`otrosCargos`," +
-                " C.`descuentosGlobales`," +
-                " ROUND(C.`importeTotal`,2) AS `importeTotal`," +
-                " C.`idMoneda`," +
-                " M.`descripcion` AS `desMoneda`," +
-                " C.`serieGuia`," +
-                " C.`correlativoGuia`," +
-                " C.`estado`," +
-                " CASE WHEN C.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
-                " C.`fechaCreacion`," +
-                " C.`usuarioCreacion`" +
-                " FROM `" +
-                keys_1.default.database.database +
-                "`.`comprobante` AS C" +
-                " INNER JOIN `" +
-                keys_1.default.database.database +
-                "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
-                " INNER JOIN `" +
-                keys_1.default.database.database +
-                "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
-                " INNER JOIN `" +
-                keys_1.default.database.database +
-                "`.`tipo-documento` AS TD ON C.`idTipoDocumento` = TD.`idTipoDocumento`" +
-                " INNER JOIN `" +
-                keys_1.default.database.database +
-                "`.`moneda` AS M ON C.`idMoneda` = M.`idMoneda`;");
-            res.json(comprobantes);
+            try {
+                const comprobantes = yield database_1.default.query("SELECT C.`idComprobante`," +
+                    " CONCAT(C.`serie`, '-', C.`correlativo`) AS `nroDocumento`," +
+                    " C.`idProveedor`," +
+                    " P.`nroDocumento` AS `nroDocumentoProveedor`," +
+                    " P.`razonSocial`," +
+                    " C.`idTipoDocumento`," +
+                    " TD.`descripcion` AS `desTipoDocumento`," +
+                    " C.`idFormaPago`," +
+                    " FP.`descripcion` AS `desFormaPago`," +
+                    " C.`fechaEmision`," +
+                    " C.`fechaVencimiento`," +
+                    " C.`totalGravadas`," +
+                    " C.`totalInafectas`," +
+                    " C.`totalExoneradas`," +
+                    " C.`totalExportacion`," +
+                    " C.`valorCompra`," +
+                    " C.`igv`," +
+                    " C.`isc`," +
+                    " C.`otrosTributos`," +
+                    " C.`otrosCargos`," +
+                    " C.`descuentosGlobales`," +
+                    " ROUND(C.`importeTotal`,2) AS `importeTotal`," +
+                    " C.`idMoneda`," +
+                    " M.`descripcion` AS `desMoneda`," +
+                    " C.`serieGuia`," +
+                    " C.`correlativoGuia`," +
+                    " C.`estado`," +
+                    " CASE WHEN C.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
+                    " C.`fechaCreacion`," +
+                    " C.`usuarioCreacion`" +
+                    " FROM `" +
+                    keys_1.default.database.database +
+                    "`.`comprobante` AS C" +
+                    " INNER JOIN `" +
+                    keys_1.default.database.database +
+                    "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
+                    " INNER JOIN `" +
+                    keys_1.default.database.database +
+                    "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
+                    " INNER JOIN `" +
+                    keys_1.default.database.database +
+                    "`.`tipo-documento` AS TD ON C.`idTipoDocumento` = TD.`idTipoDocumento`" +
+                    " INNER JOIN `" +
+                    keys_1.default.database.database +
+                    "`.`moneda` AS M ON C.`idMoneda` = M.`idMoneda`;");
+                res.json(comprobantes);
+            }
+            catch (error) {
+                res.json({
+                    id: 0,
+                    message: "No existen comprobantes",
+                    detail: error.message,
+                });
+            }
         });
     }
     report(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { nroDocumento, idTipoDocumento, idFormaPago, idMoneda, fechaEmisionIni, fechaEmisionFin, estado, } = req.params;
-            let reporteComprobantes = "SELECT C.`idComprobante` AS `Id Comprobante`," +
-                " C.`serie` + '-' + C.`correlativo` AS `Nro Documento`," +
-                " P.`nroDocumento` AS `RUC/DNI`," +
-                " P.`razonSocial` AS `Razon Social`," +
-                " C.`fechaEmision` AS `F. Emisión`," +
-                " FP.`descripcion` AS `Forma Pago`," +
-                " TD.`descripcion` AS `Tipo Documento`," +
-                " C.`importeTotal` AS `Importe Total`," +
-                " M.`descripcion` AS `Moneda`," +
-                " C.`estado` AS `Estado`" +
-                " FROM `" +
-                keys_1.default.database.database +
-                "`.`comprobante` AS C" +
-                " INNER JOIN `" +
-                keys_1.default.database.database +
-                "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
-                " INNER JOIN `" +
-                keys_1.default.database.database +
-                "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
-                " INNER JOIN `" +
-                keys_1.default.database.database +
-                "`.`tipo-documento` AS TD ON C.`idTipoDocumento` = TD.`idTipoDocumento`" +
-                " INNER JOIN `" +
-                keys_1.default.database.database +
-                "`.`moneda` AS M ON C.`idMoneda` = M.`idMoneda`" +
-                " WHERE C.`estado` <> ''";
-            nroDocumento !== "X"
-                ? (reporteComprobantes += " AND P.nroDocumento = '" + nroDocumento + "'")
-                : "";
-            idFormaPago !== "X"
-                ? (reporteComprobantes += " AND C.idFormaPago = '" + idFormaPago + "'")
-                : "";
-            idTipoDocumento !== "X"
-                ? (reporteComprobantes +=
-                    " AND C.idTipoDocumento = '" + idTipoDocumento + "'")
-                : "";
-            idMoneda !== "X"
-                ? (reporteComprobantes += " AND C.idMoneda = '" + idMoneda + "'")
-                : "";
-            estado !== "X"
-                ? (reporteComprobantes += " AND C.estado = '" + estado + "'")
-                : "";
-            fechaEmisionIni !== "X" && fechaEmisionFin === "X"
-                ? (reporteComprobantes +=
-                    "  AND C.fechaEmision >= '" + fechaEmisionIni + "'")
-                : "";
-            fechaEmisionIni !== "X" && fechaEmisionFin !== "X"
-                ? (reporteComprobantes +=
-                    "  AND C.fechaEmision BETWEEN '" +
-                        fechaEmisionIni +
-                        "' AND '" +
-                        fechaEmisionFin +
-                        "'")
-                : "";
-            console.log('reporteComprobantes', reporteComprobantes);
-            const DetallePlantillaComprobantes = yield database_1.default.query(reporteComprobantes);
-            res.json(DetallePlantillaComprobantes);
+            try {
+                const { nroDocumento, idTipoDocumento, idFormaPago, idMoneda, fechaEmisionIni, fechaEmisionFin, estado, } = req.params;
+                let reporteComprobantes = "SELECT C.`idComprobante` AS `Id Comprobante`," +
+                    " C.`serie` + '-' + C.`correlativo` AS `Nro Documento`," +
+                    " P.`nroDocumento` AS `RUC/DNI`," +
+                    " P.`razonSocial` AS `Razon Social`," +
+                    " C.`fechaEmision` AS `F. Emisión`," +
+                    " FP.`descripcion` AS `Forma Pago`," +
+                    " TD.`descripcion` AS `Tipo Documento`," +
+                    " C.`importeTotal` AS `Importe Total`," +
+                    " M.`descripcion` AS `Moneda`," +
+                    " C.`estado` AS `Estado`" +
+                    " FROM `" +
+                    keys_1.default.database.database +
+                    "`.`comprobante` AS C" +
+                    " INNER JOIN `" +
+                    keys_1.default.database.database +
+                    "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
+                    " INNER JOIN `" +
+                    keys_1.default.database.database +
+                    "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
+                    " INNER JOIN `" +
+                    keys_1.default.database.database +
+                    "`.`tipo-documento` AS TD ON C.`idTipoDocumento` = TD.`idTipoDocumento`" +
+                    " INNER JOIN `" +
+                    keys_1.default.database.database +
+                    "`.`moneda` AS M ON C.`idMoneda` = M.`idMoneda`" +
+                    " WHERE C.`estado` <> ''";
+                nroDocumento !== "X"
+                    ? (reporteComprobantes +=
+                        " AND P.nroDocumento = '" + nroDocumento + "'")
+                    : "";
+                idFormaPago !== "X"
+                    ? (reporteComprobantes += " AND C.idFormaPago = '" + idFormaPago + "'")
+                    : "";
+                idTipoDocumento !== "X"
+                    ? (reporteComprobantes +=
+                        " AND C.idTipoDocumento = '" + idTipoDocumento + "'")
+                    : "";
+                idMoneda !== "X"
+                    ? (reporteComprobantes += " AND C.idMoneda = '" + idMoneda + "'")
+                    : "";
+                estado !== "X"
+                    ? (reporteComprobantes += " AND C.estado = '" + estado + "'")
+                    : "";
+                fechaEmisionIni !== "X" && fechaEmisionFin === "X"
+                    ? (reporteComprobantes +=
+                        "  AND C.fechaEmision >= '" + fechaEmisionIni + "'")
+                    : "";
+                fechaEmisionIni !== "X" && fechaEmisionFin !== "X"
+                    ? (reporteComprobantes +=
+                        "  AND C.fechaEmision BETWEEN '" +
+                            fechaEmisionIni +
+                            "' AND '" +
+                            fechaEmisionFin +
+                            "'")
+                    : "";
+                const DetallePlantillaComprobantes = yield database_1.default.query(reporteComprobantes);
+                res.json(DetallePlantillaComprobantes);
+            }
+            catch (error) {
+                res.json({
+                    id: 0,
+                    message: "No existen comprobantes",
+                    detail: error.message,
+                });
+            }
         });
     }
     getOne(req, res) {
@@ -138,13 +156,11 @@ class ComprobanteControllers {
                     res.json(comprobante[0]);
                 }
                 else {
-                    res
-                        .status(404)
-                        .json({ id: 1, text: "Comprobante no existe", detail: "" });
+                    res.json({ id: 1, text: "Comprobante no existe", detail: "" });
                 }
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El comprobante no existe",
                     detail: error.message,
@@ -172,7 +188,7 @@ class ComprobanteControllers {
                 });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El Comprobante no fue registrado",
                     detail: error.message,
@@ -194,7 +210,7 @@ class ComprobanteControllers {
                 });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El Comprobante no fue registrado",
                     detail: error.message,
@@ -216,7 +232,7 @@ class ComprobanteControllers {
                 });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El comprobante no fue actualizado",
                     detail: error.message,
@@ -234,7 +250,7 @@ class ComprobanteControllers {
                 res.json({ id: 1, message: "El comprobante fue eliminado", detail: "" });
             }
             catch (error) {
-                res.status(404).json({
+                res.json({
                     id: 0,
                     message: "El comprobante no fue eliminado",
                     detail: error.message,
