@@ -32,7 +32,7 @@ class DetallePlantillaComprobanteControllers {
                         " C.`idFormaPago`," +
                         " FP.`descripcion` AS `desFormaPago`," +
                         " C.`importeTotal`," +
-                        " C.`tipoCambio,`," +
+                        " C.`tipoCambio`," +
                         " '' AS `detalle`," +
                         " C.`estado`" +
                         " FROM `" +
