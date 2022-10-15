@@ -39,7 +39,8 @@ class AuditoriaControllers {
 
   public async create(req: Request, res: Response): Promise<void> {
     try {
-      const { opcion, proceso, codigoError, detalleError, codigoUsuario } = req.body;
+      const { opcion, proceso, codigoError, detalleError, codigoUsuario } =
+        req.body;
       await pool.query(
         "INSERT INTO `" +
           keys.database.database +
