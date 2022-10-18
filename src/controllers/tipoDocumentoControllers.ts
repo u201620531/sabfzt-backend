@@ -9,6 +9,7 @@ class TipoDocumentoControllers {
         "SELECT `tipo-documento`.`idTipoDocumento`," +
           " `tipo-documento`.`descripcion`," +
           " `tipo-documento`.`abreviatura`," +
+          " `tipo-documento`.`asientos`," +
           " `tipo-documento`.`estado`," +
           " CASE WHEN `estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
           " `tipo-documento`.`fechaCreacion`," +
@@ -24,7 +25,6 @@ class TipoDocumentoControllers {
         text: "Tipos de documento no registrados",
         detail: error.message,
       });
-      console.log(error);
     }
   }
 
@@ -52,7 +52,6 @@ class TipoDocumentoControllers {
         message: "El tipo de documento no existe",
         detail: error.message,
       });
-      console.log(error.message);
     }
   }
 

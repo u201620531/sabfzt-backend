@@ -20,6 +20,7 @@ import tipoCambioRoutes from "./routes/tipoCambioRoutes";
 import cuentaContableRoutes from "./routes/cuentaContableRoutes";
 import subCuentaContableRoutes from "./routes/subCuentaContableRoutes";
 import auditoriaRoutes from "./routes/auditoriaRoutes";
+import correlativoPlantillaComprobanteRoutes from "./routes/correlativoPlantillaComprobanteRoutes";
 
 class Server {
   public app: Application;
@@ -60,6 +61,10 @@ class Server {
     this.app.use("/api/cuentacontables", cuentaContableRoutes);
     this.app.use("/api/subcuentacontables", subCuentaContableRoutes);
     this.app.use("/api/auditorias", auditoriaRoutes);
+    this.app.use(
+      "/api/correlativoplantillas",
+      correlativoPlantillaComprobanteRoutes
+    );
   }
 
   start(): void {

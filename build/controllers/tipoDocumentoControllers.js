@@ -21,6 +21,7 @@ class TipoDocumentoControllers {
                 const transactionTypes = yield database_1.default.query("SELECT `tipo-documento`.`idTipoDocumento`," +
                     " `tipo-documento`.`descripcion`," +
                     " `tipo-documento`.`abreviatura`," +
+                    " `tipo-documento`.`asientos`," +
                     " `tipo-documento`.`estado`," +
                     " CASE WHEN `estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
                     " `tipo-documento`.`fechaCreacion`," +

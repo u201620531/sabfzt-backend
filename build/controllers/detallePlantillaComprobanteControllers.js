@@ -27,14 +27,23 @@ class DetallePlantillaComprobanteControllers {
                         " C.`idProveedor`," +
                         " P.`nroDocumento`," +
                         " P.`razonSocial`," +
-                        " C.`idComprobante`," +
+                        " C.`idTipoDocumento`," +
+                        " TD.`descripcion` AS `desTipoDocumento`," +
+                        " TD.`abreviatura` AS `abrTipoDocumento`," +
+                        " TD.`asientos` AS `asiTipoDocumento`," +
                         " C.`fechaEmision`," +
                         " C.`idFormaPago`," +
                         " FP.`descripcion` AS `desFormaPago`," +
+                        " C.`idMoneda`," +
+                        " M.`descripcion` AS `desMoneda`," +
+                        " M.`abreviatura` AS `abrMoneda`," +
+                        " C.`valorCompra`," +
+                        " C.`igv`," +
                         " C.`importeTotal`," +
                         " C.`tipoCambio`," +
                         " '' AS `detalle`," +
-                        " C.`estado`" +
+                        " C.`estado`," +
+                        " CASE WHEN C.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`" +
                         " FROM `" +
                         keys_1.default.database.database +
                         "`.`comprobante` AS C" +
@@ -44,6 +53,12 @@ class DetallePlantillaComprobanteControllers {
                         " INNER JOIN `" +
                         keys_1.default.database.database +
                         "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
+                        " INNER JOIN `" +
+                        keys_1.default.database.database +
+                        "`.`tipo-documento` AS TD ON C.`idTipoDocumento` = TD.`idTipoDocumento`" +
+                        " INNER JOIN `" +
+                        keys_1.default.database.database +
+                        "`.`moneda` AS M ON C.`idMoneda` = M.`idMoneda`" +
                         " WHERE C.`estado` = 'A'" +
                         " AND C.`idComprobante` NOT IN (SELECT `idComprobante` FROM " +
                         keys_1.default.database.database +
@@ -55,10 +70,18 @@ class DetallePlantillaComprobanteControllers {
                         " C.`idProveedor`," +
                         " P.`nroDocumento`," +
                         " P.`razonSocial`," +
-                        " C.`idComprobante`," +
+                        " C.`idTipoDocumento`," +
+                        " TD.`descripcion` AS `desTipoDocumento`," +
+                        " TD.`abreviatura` AS `abrTipoDocumento`," +
+                        " TD.`asientos` AS `asiTipoDocumento`," +
                         " C.`fechaEmision`," +
                         " C.`idFormaPago`," +
                         " FP.`descripcion` AS `desFormaPago`," +
+                        " C.`idMoneda`," +
+                        " M.`descripcion` AS `desMoneda`," +
+                        " M.`abreviatura` AS `abrMoneda`," +
+                        " C.`valorCompra`," +
+                        " C.`igv`," +
                         " C.`importeTotal`," +
                         " C.`tipoCambio`," +
                         " DPC.`detalle`," +
@@ -75,7 +98,13 @@ class DetallePlantillaComprobanteControllers {
                         "`.`proveedor` AS P ON C.`idProveedor` = P.`idProveedor`" +
                         " INNER JOIN `" +
                         keys_1.default.database.database +
+                        "`.`tipo-documento` AS TD ON C.`idTipoDocumento` = TD.`idTipoDocumento`" +
+                        " INNER JOIN `" +
+                        keys_1.default.database.database +
                         "`.`forma-pago` AS FP ON C.`idFormaPago` = FP.`idFormaPago`" +
+                        " INNER JOIN `" +
+                        keys_1.default.database.database +
+                        "`.`moneda` AS M ON C.`idMoneda` = M.`idMoneda`" +
                         " WHERE DPC.`idPlantillaComprobante` = '" +
                         idPlantillaComprobante +
                         "';";
