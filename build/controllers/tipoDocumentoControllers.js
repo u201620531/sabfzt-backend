@@ -37,7 +37,6 @@ class TipoDocumentoControllers {
                     text: "Tipos de documento no registrados",
                     detail: error.message,
                 });
-                console.log(error);
             }
         });
     }
@@ -65,7 +64,6 @@ class TipoDocumentoControllers {
                     message: "El tipo de documento no existe",
                     detail: error.message,
                 });
-                console.log(error.message);
             }
         });
     }

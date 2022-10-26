@@ -45,7 +45,7 @@ class ComprobanteControllers {
                     " C.`serieGuia`," +
                     " C.`correlativoGuia`," +
                     " C.`estado`," +
-                    " CASE WHEN C.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
+                    " CASE WHEN C.`estado`='A' THEN 'Activo' ELSE (CASE WHEN C.`estado`='D' THEN 'Declarado' ELSE 'Inactivo' End) End AS `desEstado`," +
                     " C.`fechaCreacion`," +
                     " C.`usuarioCreacion`" +
                     " FROM `" +
@@ -79,7 +79,7 @@ class ComprobanteControllers {
             try {
                 const { nroDocumento, idTipoDocumento, idFormaPago, idMoneda, fechaEmisionIni, fechaEmisionFin, estado, } = req.params;
                 let reporteComprobantes = "SELECT C.`idComprobante` AS `Id Comprobante`," +
-                    " C.`serie` + '-' + C.`correlativo` AS `Nro Documento`," +
+                    " CONCAT(C.`serie`, '-', C.`correlativo`) AS `Nro Documento`," +
                     " P.`nroDocumento` AS `RUC/DNI`," +
                     " P.`razonSocial` AS `Razon Social`," +
                     " C.`fechaEmision` AS `F. Emisión`," +
@@ -87,7 +87,7 @@ class ComprobanteControllers {
                     " TD.`descripcion` AS `Tipo Documento`," +
                     " C.`importeTotal` AS `Importe Total`," +
                     " M.`descripcion` AS `Moneda`," +
-                    " C.`estado` AS `Estado`" +
+                    " CASE WHEN C.`estado`='A' THEN 'Activo' ELSE (CASE WHEN C.`estado`='D' THEN 'Declarado' ELSE 'Inactivo' End) End AS `Estado`" +
                     " FROM `" +
                     keys_1.default.database.database +
                     "`.`comprobante` AS C" +

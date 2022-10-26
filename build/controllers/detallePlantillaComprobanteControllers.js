@@ -43,7 +43,18 @@ class DetallePlantillaComprobanteControllers {
                         " C.`tipoCambio`," +
                         " '' AS `detalle`," +
                         " C.`estado`," +
-                        " CASE WHEN C.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`" +
+                        " CASE WHEN C.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
+                        " '' AS `subDiario`," +
+                        " '' AS `numeroComprobante`," +
+                        " '' AS `fechaComprobante`," +
+                        " '' AS `glosaPrincipal`," +
+                        " '' AS `glosaDetalle`," +
+                        " '' AS `tipoConvergencia`," +
+                        " '' AS `idCuentaContable`," +
+                        " '' AS `codigoAnexo`," +
+                        " '' AS `idCentroCosto`," +
+                        " '' AS `debeHaber`," +
+                        " '' AS `importeOriginal`" +
                         " FROM `" +
                         keys_1.default.database.database +
                         "`.`comprobante` AS C" +
@@ -86,7 +97,18 @@ class DetallePlantillaComprobanteControllers {
                         " C.`tipoCambio`," +
                         " DPC.`detalle`," +
                         " DPC.`estado`," +
-                        " CASE WHEN DPC.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`" +
+                        " CASE WHEN DPC.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
+                        " DPC.`subDiario`," +
+                        " DPC.`numeroComprobante`," +
+                        " DPC.`fechaComprobante`," +
+                        " DPC.`glosaPrincipal`," +
+                        " DPC.`glosaDetalle`," +
+                        " DPC.`tipoConvergencia`," +
+                        " DPC.`idCuentaContable`," +
+                        " DPC.`codigoAnexo`," +
+                        " DPC.`idCentroCosto`," +
+                        " DPC.`debeHaber`," +
+                        " DPC.`importeOriginal`" +
                         " FROM `" +
                         keys_1.default.database.database +
                         "`.`detalle-plantilla-comprobante` AS DPC" +
