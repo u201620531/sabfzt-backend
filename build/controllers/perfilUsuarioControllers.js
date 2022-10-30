@@ -46,7 +46,7 @@ class PerfilUsuarioControllers {
                     keys_1.default.database.database +
                     "`.`perfil-usuario` WHERE idPerfilUsuario = ?;", [idPerfilUsuario]);
                 if (perfilUsuario.length > 0) {
-                    res.json(perfilUsuario);
+                    res.json(perfilUsuario[0]);
                 }
                 else {
                     res.json({ id: 1, text: "El perfil de usuario no existe", detail: "" });
