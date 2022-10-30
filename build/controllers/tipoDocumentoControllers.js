@@ -18,7 +18,7 @@ class TipoDocumentoControllers {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const transactionTypes = yield database_1.default.query("SELECT `tipo-documento`.`idTipoDocumento`," +
+                const tiposDocumento = yield database_1.default.query("SELECT `tipo-documento`.`idTipoDocumento`," +
                     " `tipo-documento`.`descripcion`," +
                     " `tipo-documento`.`abreviatura`," +
                     " `tipo-documento`.`asientos`," +
@@ -29,7 +29,7 @@ class TipoDocumentoControllers {
                     " FROM `" +
                     keys_1.default.database.database +
                     "`.`tipo-documento`;");
-                res.json(transactionTypes);
+                res.json(tiposDocumento);
             }
             catch (error) {
                 res.json({

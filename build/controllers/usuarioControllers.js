@@ -19,7 +19,17 @@ class UsuarioControllers {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const usuarios = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`usuario`;");
+                const usuarios = yield database_1.default.query("SELECT `usuario`.`idEmpleado`," +
+                    " `usuario`.`codigoUsuario`," +
+                    " `usuario`.`contrasena`," +
+                    " `usuario`.`idPerfilUsuario`," +
+                    " `usuario`.`estado`," +
+                    " CASE WHEN `estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
+                    " `usuario`.`fechaCreacion`," +
+                    " `usuario`.`usuarioCreacion`" +
+                    " FROM `" +
+                    keys_1.default.database.database +
+                    "`.`usuario`;");
                 res.json(usuarios);
             }
             catch (error) {
@@ -45,11 +55,11 @@ class UsuarioControllers {
                         res.json(usuario[0]);
                     }
                     else {
-                        res.json({ id: 1, text: "Contrasena incorrecta", detail: "" });
+                        res.json({ id: 1, message: "Contrasena incorrecta", detail: "" });
                     }
                 }
                 else {
-                    res.json({ id: 1, text: "El usuario no existe", detail: "" });
+                    res.json({ id: 1, message: "El usuario no existe", detail: "" });
                 }
             }
             catch (error) {
@@ -72,7 +82,7 @@ class UsuarioControllers {
                     res.json(usuario[0]);
                 }
                 else {
-                    res.json({ id: 1, text: "El usuario no existe", detail: "" });
+                    res.json({ id: 1, message: "El usuario no existe", detail: "" });
                 }
             }
             catch (error) {

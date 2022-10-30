@@ -7,7 +7,17 @@ class UsuarioControllers {
   public async list(req: Request, res: Response) {
     try {
       const usuarios = await pool.query(
-        "SELECT * FROM `" + keys.database.database + "`.`usuario`;"
+        "SELECT `usuario`.`idEmpleado`," +
+          " `usuario`.`codigoUsuario`," +
+          " `usuario`.`contrasena`," +
+          " `usuario`.`idPerfilUsuario`," +
+          " `usuario`.`estado`," +
+          " CASE WHEN `estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
+          " `usuario`.`fechaCreacion`," +
+          " `usuario`.`usuarioCreacion`" +
+          " FROM `" +
+          keys.database.database +
+          "`.`usuario`;"
       );
       res.json(usuarios);
     } catch (error: any) {
@@ -39,10 +49,10 @@ class UsuarioControllers {
         if (contrasenaHash) {
           res.json(usuario[0]);
         } else {
-          res.json({ id: 1, text: "Contrasena incorrecta", detail: "" });
+          res.json({ id: 1, message: "Contrasena incorrecta", detail: "" });
         }
       } else {
-        res.json({ id: 1, text: "El usuario no existe", detail: "" });
+        res.json({ id: 1, message: "El usuario no existe", detail: "" });
       }
     } catch (error: any) {
       res.json({
@@ -65,7 +75,7 @@ class UsuarioControllers {
       if (usuario.length > 0) {
         res.json(usuario[0]);
       } else {
-        res.json({ id: 1, text: "El usuario no existe", detail: "" });
+        res.json({ id: 1, message: "El usuario no existe", detail: "" });
       }
     } catch (error: any) {
       res.json({

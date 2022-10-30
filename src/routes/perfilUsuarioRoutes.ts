@@ -10,10 +10,10 @@ class PerfilUsuarioRoutes {
 
   config() {
     this.router.get('/', perfilUsuarioControllers.list);
-    this.router.get('/:codigoUsuario/:contrasena', perfilUsuarioControllers.getByidPerfilUsuario);
+    this.router.get('/:idPerfilUsuario', perfilUsuarioControllers.getByidPerfilUsuario);
     this.router.post('/', perfilUsuarioControllers.create);
-    this.router.put('/:codigoUsuario', perfilUsuarioControllers.update);
-    this.router.delete('/:codigoUsuario', perfilUsuarioControllers.delete);
+    this.router.put('/:idPerfilUsuario', perfilUsuarioControllers.update);
+    this.router.delete('/:idPerfilUsuario', perfilUsuarioControllers.delete);
   }
 }
 

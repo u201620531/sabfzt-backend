@@ -5,7 +5,7 @@ import keys from "./../keys";
 class TipoDocumentoControllers {
   public async list(req: Request, res: Response) {
     try {
-      const transactionTypes = await pool.query(
+      const tiposDocumento = await pool.query(
         "SELECT `tipo-documento`.`idTipoDocumento`," +
           " `tipo-documento`.`descripcion`," +
           " `tipo-documento`.`abreviatura`," +
@@ -18,7 +18,7 @@ class TipoDocumentoControllers {
           keys.database.database +
           "`.`tipo-documento`;"
       );
-      res.json(transactionTypes);
+      res.json(tiposDocumento);
     } catch (error: any) {
       res.json({
         id: 0,

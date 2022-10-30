@@ -12,10 +12,10 @@ class PerfilUsuarioRoutes {
     }
     config() {
         this.router.get('/', perfilUsuarioControllers_1.default.list);
-        this.router.get('/:codigoUsuario/:contrasena', perfilUsuarioControllers_1.default.getByidPerfilUsuario);
+        this.router.get('/:idPerfilUsuario', perfilUsuarioControllers_1.default.getByidPerfilUsuario);
         this.router.post('/', perfilUsuarioControllers_1.default.create);
-        this.router.put('/:codigoUsuario', perfilUsuarioControllers_1.default.update);
-        this.router.delete('/:codigoUsuario', perfilUsuarioControllers_1.default.delete);
+        this.router.put('/:idPerfilUsuario', perfilUsuarioControllers_1.default.update);
+        this.router.delete('/:idPerfilUsuario', perfilUsuarioControllers_1.default.delete);
     }
 }
 const perfilUsuarioRoutes = new PerfilUsuarioRoutes();

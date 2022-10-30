@@ -18,8 +18,16 @@ class PerfilUsuarioControllers {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const perfiles = yield database_1.default.query("SELECT * FROM `" + keys_1.default.database.database + "`.`perfil-usuario`;");
-                res.json(perfiles);
+                const perfilesUsuario = yield database_1.default.query("SELECT `perfil-usuario`.`idPerfilUsuario`," +
+                    " `perfil-usuario`.`nombre`," +
+                    " `perfil-usuario`.`estado`," +
+                    " CASE WHEN `estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
+                    " `perfil-usuario`.`fechaCreacion`," +
+                    " `perfil-usuario`.`usuarioCreacion`" +
+                    " FROM `" +
+                    keys_1.default.database.database +
+                    "`.`perfil-usuario`;");
+                res.json(perfilesUsuario);
             }
             catch (error) {
                 res.json({
@@ -41,7 +49,7 @@ class PerfilUsuarioControllers {
                     res.json(perfilUsuario);
                 }
                 else {
-                    res.json({ id: 1, text: "perfil de usuario no existe", detail: "" });
+                    res.json({ id: 1, text: "El perfil de usuario no existe", detail: "" });
                 }
             }
             catch (error) {

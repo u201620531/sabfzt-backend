@@ -5,10 +5,18 @@ import keys from "../keys";
 class PerfilUsuarioControllers {
   public async list(req: Request, res: Response) {
     try {
-      const perfiles = await pool.query(
-        "SELECT * FROM `" + keys.database.database + "`.`perfil-usuario`;"
+      const perfilesUsuario = await pool.query(
+        "SELECT `perfil-usuario`.`idPerfilUsuario`," +
+          " `perfil-usuario`.`nombre`," +
+          " `perfil-usuario`.`estado`," +
+          " CASE WHEN `estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
+          " `perfil-usuario`.`fechaCreacion`," +
+          " `perfil-usuario`.`usuarioCreacion`" +
+          " FROM `" +
+          keys.database.database +
+          "`.`perfil-usuario`;"
       );
-      res.json(perfiles);
+      res.json(perfilesUsuario);
     } catch (error: any) {
       res.json({
         id: 0,
@@ -30,7 +38,7 @@ class PerfilUsuarioControllers {
       if (perfilUsuario.length > 0) {
         res.json(perfilUsuario);
       } else {
-        res.json({ id: 1, text: "perfil de usuario no existe", detail: "" });
+        res.json({ id: 1, text: "El perfil de usuario no existe", detail: "" });
       }
     } catch (error: any) {
       res.json({
