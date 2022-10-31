@@ -7,17 +7,25 @@ class UsuarioControllers {
   public async list(req: Request, res: Response) {
     try {
       const usuarios = await pool.query(
-        "SELECT `usuario`.`idEmpleado`," +
-          " `usuario`.`codigoUsuario`," +
-          " `usuario`.`contrasena`," +
-          " `usuario`.`idPerfilUsuario`," +
-          " `usuario`.`estado`," +
-          " CASE WHEN `estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
-          " `usuario`.`fechaCreacion`," +
-          " `usuario`.`usuarioCreacion`" +
+        "SELECT U.`idEmpleado`," +
+          " CONCAT(E.apellido, ', ', E.nombre) AS nomEmpleado," +
+          " U.`codigoUsuario`," +
+          " U.`contrasena`," +
+          " U.`idPerfilUsuario`," +
+          " PU.nombre AS nomPerfilUsuario," +
+          " U.`estado`," +
+          " CASE WHEN U.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
+          " U.`fechaCreacion`," +
+          " U.`usuarioCreacion`" +
           " FROM `" +
           keys.database.database +
-          "`.`usuario`;"
+          "`.`usuario` AS U" +
+          " INNER JOIN `" +
+          keys.database.database +
+          "`.`empleado` AS E ON U.idEmpleado = E.idEmpleado" +
+          " INNER JOIN `" +
+          keys.database.database +
+          "`.`perfil-usuario` AS PU ON U.idPerfilUsuario = PU.idPerfilUsuario;"
       );
       res.json(usuarios);
     } catch (error: any) {

@@ -19,17 +19,25 @@ class UsuarioControllers {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const usuarios = yield database_1.default.query("SELECT `usuario`.`idEmpleado`," +
-                    " `usuario`.`codigoUsuario`," +
-                    " `usuario`.`contrasena`," +
-                    " `usuario`.`idPerfilUsuario`," +
-                    " `usuario`.`estado`," +
-                    " CASE WHEN `estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
-                    " `usuario`.`fechaCreacion`," +
-                    " `usuario`.`usuarioCreacion`" +
+                const usuarios = yield database_1.default.query("SELECT U.`idEmpleado`," +
+                    " CONCAT(E.apellido, ', ', E.nombre) AS nomEmpleado," +
+                    " U.`codigoUsuario`," +
+                    " U.`contrasena`," +
+                    " U.`idPerfilUsuario`," +
+                    " PU.nombre AS nomPerfilUsuario," +
+                    " U.`estado`," +
+                    " CASE WHEN U.`estado`='A' THEN 'Activo' ELSE 'Inactivo' End AS `desEstado`," +
+                    " U.`fechaCreacion`," +
+                    " U.`usuarioCreacion`" +
                     " FROM `" +
                     keys_1.default.database.database +
-                    "`.`usuario`;");
+                    "`.`usuario` AS U" +
+                    " INNER JOIN `" +
+                    keys_1.default.database.database +
+                    "`.`empleado` AS E ON U.idEmpleado = E.idEmpleado" +
+                    " INNER JOIN `" +
+                    keys_1.default.database.database +
+                    "`.`perfil-usuario` AS PU ON U.idPerfilUsuario = PU.idPerfilUsuario;");
                 res.json(usuarios);
             }
             catch (error) {
