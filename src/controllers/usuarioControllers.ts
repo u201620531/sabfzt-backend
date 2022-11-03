@@ -136,7 +136,7 @@ class UsuarioControllers {
       let testp='';
     try {
       let { codigoUsuario, contrasena } = req.body;
-      await hashPassword(contrasena).then((value: any) => (contrasena = value));
+      // await hashPassword(contrasena).then((value: any) => (contrasena = value));
       await hashPassword(contrasena).then((value: any) => (testp = value));
       await pool.query(
         "UPDATE `" +
@@ -144,7 +144,7 @@ class UsuarioControllers {
           "`.`usuario` SET `contrasena` = ? WHERE `codigoUsuario` = ?;",
         [contrasena, codigoUsuario]
       );
-      res.json({ id: 1, message: "La contrasena fue actualizada", detail: testp });
+      res.json({ id: 1, message: "La contrasena fue actualizada", detail: 'test:' + testp + '-' + contrasena });
     } catch (error: any) {
       res.json({
         id: 0,
