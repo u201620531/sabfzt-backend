@@ -96,6 +96,7 @@ class UsuarioControllers {
 
   public async create(req: Request, res: Response): Promise<void> {
     try {
+            await hashPassword(req.body.contrasena).then((value: any) => (req.body.contrasena = value));
       await pool.query(
         "INSERT INTO `" + keys.database.database + "`.`usuario` set ?",
         [req.body]
@@ -133,18 +134,16 @@ class UsuarioControllers {
     req: Request,
     res: Response
   ): Promise<void> {
-      let testp='';
     try {
       let { codigoUsuario, contrasena } = req.body;
-      // await hashPassword(contrasena).then((value: any) => (contrasena = value));
-      await hashPassword(contrasena).then((value: any) => (testp = value));
+      await hashPassword(contrasena).then((value: any) => (contrasena = value));
       await pool.query(
         "UPDATE `" +
           keys.database.database +
           "`.`usuario` SET `contrasena` = ? WHERE `codigoUsuario` = ?;",
         [contrasena, codigoUsuario]
       );
-      res.json({ id: 1, message: "La contrasena fue actualizada", detail: 'test:' + testp + '-' + contrasena });
+      res.json({ id: 1, message: "La contrasena fue actualizada", detail: ""});
     } catch (error: any) {
       res.json({
         id: 0,
