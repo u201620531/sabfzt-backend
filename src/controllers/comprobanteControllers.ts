@@ -73,7 +73,6 @@ class ComprobanteControllers {
         fechaEmisionFin,
         estado,
       } = req.params;
-
       let reporteComprobantes =
         "SELECT C.`idComprobante` AS `Id Comprobante`," +
         " CONCAT(C.`serie`, '-', C.`correlativo`) AS `Nro Documento`," +
